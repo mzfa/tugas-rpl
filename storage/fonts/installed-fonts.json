@@ -1,0 +1,21 @@
+{
+    "font awesome 5 brands": {
+        "normal": "font_awesome_5_brands_normal_ce0c5aef724baf5ee9fb188669fd4ab0"
+    },
+    "font awesome 5 free": {
+        "normal": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/projek\/hcm2\/storage\/fonts\/font_awesome_5_free_normal_b001797e033ced5c56f0964c6bba9eb3",
+        "900": "font_awesome_5_free_900_ab97c1f7cc848df949eb8afdd0f9b9de"
+    },
+    "weathericons": {
+        "normal": "weathericons_normal_d69f309a3a9c96571bb7692e922e4137"
+    },
+    "summernote": {
+        "normal": "summernote_normal_2ae4825893878d16142d0c3a5eb719c8"
+    },
+    "nunito": {
+        "normal": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/projek\/hcm2\/storage\/fonts\/nunito_normal_570f9edd0c80297c870e131322616dc0",
+        "600": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/projek\/hcm2\/storage\/fonts\/nunito_600_0ed242dc838a003463c4c2aa5ce6a2e6",
+        "bold": "\/Applications\/XAMPP\/xamppfiles\/htdocs\/projek\/hcm2\/storage\/fonts\/nunito_bold_c26ade6bc00ebc8d8400ec60f813673e",
+        "800": "nunito_800_c2160bc7030e11f23e97011979f1ea15"
+    }
+}
