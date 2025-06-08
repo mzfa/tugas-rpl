@@ -65,7 +65,7 @@
                                                                 name="menu_id[]" value="{{ $item['menu_id'] }}">
                                                         </td>
                                                         <td>
-                                                            <h5 class="text-success">{{ strtoupper($item['nama_menu']) }}
+                                                            <h5 class="text-white">{{ strtoupper($item['nama_menu']) }}
                                                             </h5>
                                                             @if ($item['parent_id'] == 0)
                                                             @else

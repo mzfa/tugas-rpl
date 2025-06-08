@@ -1,13 +1,21 @@
+@php
+    if(!empty($penerimaan->flag_selesai)){
+        $disable = 'readonly';
+    }else{
+        $disable = '';
+    } 
+@endphp
 <div class="table-responsive">
     <div class="mb-3">
         <label for="staticEmail" class="form-label">Tanggal Penerimaan</label>
-        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $penerimaan->tanggal }}" required>
+        <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $penerimaan->tanggal ?? '' }}" {{ $disable }} required>
     </div>
     <div class="mb-3">
-        <label for="staticEmail" class="form-label">Faktur</label>
-        <input type="text" class="form-control" id="faktur" name="faktur" value="{{ $penerimaan->faktur }}" required>
-    </div><br>
-    <table class="table align-middle table-nowrap" id="customerTable">
+        <label for="staticEmail" class="form-label">No Surat Jalan/Dokumen Referensi</label>
+        <input type="text" class="form-control" id="faktur" name="faktur" value="{{ $penerimaan->faktur ?? '' }}" {{ $disable }} required>
+    </div>
+    <input class="form-check-input" type="checkbox" name="flag_selesai" value="1" @if(!empty($penerimaan->flag_selesai)) checked @endif> Penerimaan Selesai
+    <table class="table align-middle table-nowrap mt-3" id="customerTable">
         <thead class="table-light">
             <tr>
                 <th scope="col" style="width: 50px;">
@@ -22,6 +30,7 @@
                 <th class="sort" data-sort="customer_nama">Terima</th>
                 <th class="sort" data-sort="customer_nama">Batch</th>
                 <th class="sort" data-sort="customer_nama">Exp</th>
+                <th class="sort" data-sort="customer_nama">Rak</th>
             </tr>
         </thead>
         <tbody class="list form-check-all">
@@ -37,15 +46,23 @@
                     <td class="customer_name">{{ $item->satuan }}</td>
                     <td class="customer_name">{{ $jumlah[$item->barang_id] ?? '' }}</td>
                     <td class="customer_name">
-                        <input type="number" class="form-control" name="terima[{{ $item->barang_id }}]" value="{{ $item->terima ?? '' }}">
-                        <input type="hidden" class="form-control" name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
-                        <input type="hidden" class="form-control" name="harga_jual[{{ $item->barang_id }}]" value="{{ $item->harga_jual }}">
-                        <input type="hidden" class="form-control" name="pemesanan_detail_id[{{ $item->barang_id }}]" value="{{ $pemesanan_detail_id[$item->barang_id] ?? '' }}">
-                        <input type="hidden" class="form-control" name="penerimaan_detail_id[{{ $item->barang_id }}]" value="{{ $pemesanan_detail_id[$item->barang_id] ?? '' }}">
-                        <input type="hidden" class="form-control" name="penerimaan_id" value="{{ $penerimaan_id[$item->barang_id] ?? '' }}">
+                        <input type="number" class="form-control" {{ $disable }} name="terima[{{ $item->barang_id }}]" value="{{ $item->terima ?? '' }}">
+                        <input type="hidden" class="form-control" {{ $disable }} name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
+                        <input type="hidden" class="form-control" {{ $disable }} name="harga_jual[{{ $item->barang_id }}]" value="{{ $item->harga_jual }}">
+                        <input type="hidden" class="form-control" {{ $disable }} name="pemesanan_detail_id[{{ $item->barang_id }}]" value="{{ $pemesanan_detail_id[$item->barang_id] ?? '' }}">
+                        <input type="hidden" class="form-control" {{ $disable }} name="penerimaan_detail_id[{{ $item->barang_id }}]" value="{{ $pemesanan_detail_id[$item->barang_id] ?? '' }}">
+                        <input type="hidden" class="form-control" {{ $disable }} name="penerimaan_id" value="{{ $penerimaan_id[$item->barang_id] ?? '' }}">
                     </td>
-                    <td><input type="text" class="form-control" name="batch[{{ $item->barang_id }}]" value="{{ $item->batch ?? '' }}"></td>
-                    <td><input type="date" class="form-control" name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}"></td>
+                    <td><input type="text" class="form-control" {{ $disable }} name="batch[{{ $item->barang_id }}]" value="{{ $item->batch ?? '' }}"></td>
+                    <td><input type="date" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}"></td>
+                    <td>
+                        <select {{ $disable }} name="rak_id[{{ $item->barang_id }}]" class="form-control">
+                            <option value="">Pilih Rak</option>
+                            @foreach ($rak as $item2)
+                                <option @if($item->rak_id == $item2->rak_id) selected @endif value="{{ $item2->rak_id }}">{{ $item2->nama }}</option>
+                            @endforeach
+                        </select>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

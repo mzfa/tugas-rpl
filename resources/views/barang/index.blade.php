@@ -52,6 +52,7 @@
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
+                                            <th class="sort" data-sort="customer_nama">Gambar</th>
                                             <th class="sort" data-sort="customer_nama">Nama Barang</th>
                                             <th class="sort" data-sort="customer_nama">Kode Barang</th>
                                             <th class="sort" data-sort="customer_nama">Satuan</th>
@@ -62,6 +63,7 @@
                                     <tbody class="list form-check-all">
                                         @foreach ($data as $item)
                                             <tr>
+                                                <td class="customer_name"><img src="{{ url('gambar/barang/'.$item->gambar) }}" alt="Kosong" width="50px"></td>
                                                 <td class="customer_name">{{ $item->nama }}</td>
                                                 <td class="customer_name">{{ $item->kode_barang }}</td>
                                                 <td class="customer_name">{{ $item->satuan }}</td>
@@ -163,6 +165,46 @@
                         <label for="staticEmail" class="form-label">Keterangan</label>
                         <textarea name="keterangan" id="keterangan" cols="30" rows="3" class="form-control"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="staticEmail" class="form-label">Gambar</label>
+                        <div class="dropzone">
+                            <div class="fallback">
+                                <input name="file" type="file" multiple="multiple">
+                            </div>
+                            <div class="dz-message needsclick">
+                                <div class="mb-3">
+                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                </div>
+
+                                <h4>Drop files here or click to upload.</h4>
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled mb-0" id="dropzone-preview">
+                            <li class="mt-2" id="dropzone-preview-list">
+                                <!-- This is used as the file preview template -->
+                                <div class="border rounded">
+                                    <div class="d-flex p-2">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="avatar-sm bg-light rounded">
+                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="pt-1">
+                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                <strong class="error text-danger" data-dz-errormessage></strong>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 ms-3">
+                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -175,7 +217,7 @@
 
 <div class="modal fade" id="editModal" tabindex="-1"> 
     <div class="modal-dialog">
-      <form action="{{ url('barang/update') }}" method="post">
+      <form action="{{ url('barang/update') }}" method="post" enctype="multipart/form-data">
         @csrf
           <div class="modal-content">
               <div class="modal-header">

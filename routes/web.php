@@ -18,6 +18,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DokAdmController;
 use App\Http\Controllers\GambarKerjaController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\HSEController;
 use App\Http\Controllers\IjinPelaksanaanController;
 use App\Http\Controllers\JenisPekerjaanController;
@@ -29,10 +30,12 @@ use App\Http\Controllers\NotulenController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenerimaanController;
+use App\Http\Controllers\PermintaanController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\RakController;
 use App\Http\Controllers\StatusDokumenController;
+use App\Http\Controllers\StokDepoController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SuratMenyuratController;
 
@@ -125,6 +128,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/bagian/edit/{id}', 'edit');
         Route::post('/bagian/update', 'update');
     });
+    Route::controller(GudangController::class)->middleware('cek_login:gudang.index')->group(function () {
+        Route::get('/gudang', 'index')->name('gudang.index');
+        Route::get('/gudang/delete/{id}', 'delete');
+        Route::post('/gudang/store', 'store');
+        Route::get('/gudang/edit/{id}', 'edit');
+        Route::post('/gudang/update', 'update');
+        Route::get('/gudang/rak/{id}', 'rak');
+    });
     Route::controller(BarangController::class)->middleware('cek_login:barang.index')->group(function () {
         Route::get('/barang', 'index')->name('barang.index');
         Route::get('/barang/delete/{id}', 'delete');
@@ -144,6 +155,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/rak/delete/{id}', 'delete');
         Route::post('/rak/store', 'store');
         Route::get('/rak/edit/{id}', 'edit');
+        Route::get('/rak/barcode/{id}', 'barcode');
         Route::post('/rak/update', 'update');
     });
     Route::controller(PaketController::class)->middleware('cek_login:paket.index')->group(function () {
@@ -164,169 +176,31 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/pemesanan/update', 'update');
         Route::post('/pemesanan/update_detail', 'update_detail');
     });
+    Route::controller(PermintaanController::class)->middleware('cek_login:permintaan.index')->group(function () {
+        Route::get('/permintaan', 'index')->name('permintaan.index');
+        Route::get('/permintaan/delete/{id}', 'delete');
+        Route::post('/permintaan/store', 'store');
+        Route::get('/permintaan/edit/{id}', 'edit');
+        Route::get('/permintaan/detail/{id}', 'detail');
+        Route::post('/permintaan/update', 'update');
+        Route::post('/permintaan/update_detail', 'update_detail');
+    });
     Route::controller(PenerimaanController::class)->middleware('cek_login:penerimaan.index')->group(function () {
         Route::get('/penerimaan', 'index')->name('penerimaan.index');
         Route::get('/penerimaan/delete/{id}', 'delete');
         Route::post('/penerimaan/store', 'store');
         Route::get('/penerimaan/edit/{id}', 'edit');
+        Route::get('/penerimaan/scan/{id}', 'scan');
         Route::get('/penerimaan/detail/{id}', 'detail');
+        Route::get('/penerimaan/lihat/{id}', 'lihat');
+        Route::get('/penerimaan/terima_barang/{id}/{rak}', 'terima_barang');
         Route::post('/penerimaan/update', 'update');
         Route::post('/penerimaan/update_detail', 'update_detail');
     });
+    Route::controller(StokDepoController::class)->middleware('cek_login:stok_depo.index')->group(function () {
+        Route::get('/stok_depo', 'index')->name('stok_depo.index');
+    });
 
-    Route::controller(CalendarController::class)->middleware('cek_login:calendar.index')->group(function () {
-        Route::get('/calendar', 'index')->name('calendar.index');
-        Route::get('/calendar/sync', 'sync');
-        Route::post('/calendar/store', 'store');
-        Route::post('/calendar/update', 'update');
-        Route::get('/calendar/edit/{id}', 'edit');
-        Route::get('/calendar/delete/{id}', 'delete');
-    });
-    Route::controller(ProyekController::class)->middleware('cek_login:proyek.index')->group(function () {
-        Route::get('/proyek', 'index')->name('proyek.index');
-        Route::get('/proyek/sync', 'sync');
-        Route::post('/proyek/store', 'store');
-        Route::post('/proyek/update', 'update');
-        Route::get('/proyek/edit/{id}', 'edit');
-        Route::get('/proyek/delete/{id}', 'delete');
-        Route::get('/proyek/detail/{id}', 'detail');
-    });
-    Route::controller(SuratMenyuratController::class)->middleware('cek_login:surat_menyurat.index')->group(function () {
-        Route::get('/surat_menyurat', 'index')->name('surat_menyurat.index');
-        Route::get('/surat_menyurat/sync', 'sync');
-        Route::post('/surat_menyurat/store', 'store');
-        Route::post('/surat_menyurat/update', 'update');
-        Route::get('/surat_menyurat/edit/{id}', 'edit');
-        Route::get('/surat_menyurat/doc/{id}', 'doc');
-        Route::post('/surat_menyurat/store_doc', 'store_doc');
-        Route::get('/surat_menyurat/delete/{id}', 'delete');
-        Route::get('/surat_menyurat/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(DokAdmController::class)->middleware('cek_login:dok_adm.index')->group(function () {
-        Route::get('/dok_adm', 'index')->name('dok_adm.index');
-        Route::get('/dok_adm/sync', 'sync');
-        Route::post('/dok_adm/store', 'store');
-        Route::post('/dok_adm/update', 'update');
-        Route::get('/dok_adm/edit/{id}', 'edit');
-        Route::get('/dok_adm/doc/{id}', 'doc');
-        Route::post('/dok_adm/store_doc', 'store_doc');
-        Route::get('/dok_adm/delete/{id}', 'delete');
-        Route::get('/dok_adm/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(MaterialApprovalController::class)->middleware('cek_login:material_approval.index')->group(function () {
-        Route::get('/material_approval', 'index')->name('material_approval.index');
-        Route::get('/material_approval/sync', 'sync');
-        Route::post('/material_approval/store', 'store');
-        Route::post('/material_approval/dokumen_proses_store', 'dokumen_proses_store');
-        Route::post('/material_approval/update', 'update');
-        Route::post('/material_approval/dokumen_proses_update', 'dokumen_proses_update');
-        Route::get('/material_approval/edit/{id}', 'edit');
-        Route::get('/material_approval/dokumen_proses_edit/{id}', 'dokumen_proses_edit');
-        Route::get('/material_approval/doc/{id}', 'doc');
-        Route::post('/material_approval/store_doc', 'store_doc');
-        Route::get('/material_approval/delete/{id}', 'delete');
-        Route::get('/material_approval/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/material_approval/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(IjinPelaksanaanController::class)->middleware('cek_login:ijin_pelaksanaan.index')->group(function () {
-        Route::get('/ijin_pelaksanaan', 'index')->name('ijin_pelaksanaan.index');
-        Route::get('/ijin_pelaksanaan/sync', 'sync');
-        Route::post('/ijin_pelaksanaan/store', 'store');
-        Route::post('/ijin_pelaksanaan/dokumen_proses_store', 'dokumen_proses_store');
-        Route::post('/ijin_pelaksanaan/update', 'update');
-        Route::post('/ijin_pelaksanaan/dokumen_proses_update', 'dokumen_proses_update');
-        Route::get('/ijin_pelaksanaan/edit/{id}', 'edit');
-        Route::get('/ijin_pelaksanaan/dokumen_proses_edit/{id}', 'dokumen_proses_edit');
-        Route::get('/ijin_pelaksanaan/doc/{id}', 'doc');
-        Route::post('/ijin_pelaksanaan/store_doc', 'store_doc');
-        Route::get('/ijin_pelaksanaan/delete/{id}', 'delete');
-        Route::get('/ijin_pelaksanaan/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/ijin_pelaksanaan/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(MetodeController::class)->middleware('cek_login:metode.index')->group(function () {
-        Route::get('/metode', 'index')->name('metode.index');
-        Route::get('/metode/sync', 'sync');
-        Route::post('/metode/store', 'store');
-        Route::post('/metode/dokumen_proses_store', 'dokumen_proses_store');
-        Route::post('/metode/update', 'update');
-        Route::post('/metode/dokumen_proses_update', 'dokumen_proses_update');
-        Route::get('/metode/edit/{id}', 'edit');
-        Route::get('/metode/dokumen_proses_edit/{id}', 'dokumen_proses_edit');
-        Route::get('/metode/doc/{id}', 'doc');
-        Route::post('/metode/store_doc', 'store_doc');
-        Route::get('/metode/delete/{id}', 'delete');
-        Route::get('/metode/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/metode/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(GambarKerjaController::class)->middleware('cek_login:gambar_kerja.index')->group(function () {
-        Route::get('/gambar_kerja', 'index')->name('gambar_kerja.index');
-        Route::get('/gambar_kerja/sync', 'sync');
-        Route::post('/gambar_kerja/store', 'store');
-        Route::post('/gambar_kerja/dokumen_proses_store', 'dokumen_proses_store');
-        Route::post('/gambar_kerja/uraian_gambar_kerja_store', 'uraian_gambar_kerja_store');
-        Route::post('/gambar_kerja/update', 'update');
-        Route::post('/gambar_kerja/dokumen_proses_update', 'dokumen_proses_update');
-        Route::post('/gambar_kerja/uraian_gambar_kerja_update', 'uraian_gambar_kerja_update');
-        Route::get('/gambar_kerja/edit/{id}', 'edit');
-        Route::get('/gambar_kerja/dokumen_proses_edit/{id}', 'dokumen_proses_edit');
-        Route::get('/gambar_kerja/uraian_gambar_kerja_edit/{id}', 'uraian_gambar_kerja_edit');
-        Route::get('/gambar_kerja/doc/{id}', 'doc');
-        Route::post('/gambar_kerja/store_doc', 'store_doc');
-        Route::get('/gambar_kerja/delete/{id}', 'delete');
-        Route::get('/gambar_kerja/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/gambar_kerja/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(NotulenController::class)->middleware('cek_login:notulen.index')->group(function () {
-        Route::get('/notulen', 'index')->name('notulen.index');
-        Route::get('/notulen/sync', 'sync');
-        Route::post('/notulen/store', 'store');
-        Route::post('/notulen/dokumen_proses_store', 'dokumen_proses_store');
-        Route::post('/notulen/update', 'update');
-        Route::post('/notulen/dokumen_proses_update', 'dokumen_proses_update');
-        Route::get('/notulen/edit/{id}', 'edit');
-        Route::get('/notulen/dokumen_proses_edit/{id}', 'dokumen_proses_edit');
-        Route::get('/notulen/doc/{id}', 'doc');
-        Route::post('/notulen/store_doc', 'store_doc');
-        Route::get('/notulen/delete/{id}', 'delete');
-        Route::get('/notulen/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/notulen/delete_doc/{id}', 'delete_doc');
-    });
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'index')->name('profile.index');
-        Route::get('/profile/sync', 'sync');
-        Route::post('/profile/alamat', 'alamat');
-        Route::post('/profile/kontak', 'kontak');
-        Route::post('/profile/updateProfile', 'updateProfile');
-        Route::post('/profile/update_data_diri', 'update_data_diri');
-        Route::post('/profile/tambah_keluarga', 'tambah_keluarga');
-        Route::post('/profile/update_alamat', 'update_alamat');
-        Route::post('/profile/tambah_pendidikan', 'tambah_pendidikan');
-        Route::post('/profile/tambah_pekerjaan', 'tambah_pekerjaan');
-        Route::post('/profile/tambah_pelatihan', 'tambah_pelatihan');
-        Route::get('/profile/hapus_pendidikan/{id}', 'hapus_pendidikan');
-        Route::get('/profile/hapus_keluarga/{id}', 'hapus_keluarga');
-        Route::get('/profile/hapus_pekerjaan/{id}', 'hapus_pekerjaan');
-        Route::get('/profile/hapus_pelatihan/{id}', 'hapus_pelatihan');
-        Route::get('/profile/table_keluarga/{id}', 'table_keluarga');
-        Route::get('/profile/table_pendidikan/{id}', 'table_pendidikan');
-        Route::get('/profile/table_riwayat_pekerjaan/{id}', 'table_riwayat_pekerjaan');
-        Route::get('/profile/table_pelatihan/{id}', 'table_pelatihan');
-    });
-    Route::controller(ProgressController::class)->middleware('cek_login:progres.index')->group(function () {
-        Route::get('/progres', 'index')->name('progres.index');
-        Route::get('/progres/sync', 'sync');
-        Route::post('/progres/store', 'store');
-        Route::post('/progres/progress_detail_store', 'progress_detail_store');
-        Route::post('/progres/update', 'update');
-        Route::post('/progres/progres_detail_update', 'progres_detail_update');
-        Route::get('/progres/edit/{id}', 'edit');
-        Route::get('/progres/progres_detail_edit/{id}', 'progres_detail_edit');
-        Route::get('/progres/doc/{id}', 'doc');
-        Route::post('/progres/store_doc', 'store_doc');
-        Route::get('/progres/delete/{id}', 'delete');
-        Route::get('/progres/delete_proses_store/{id}', 'delete_proses_store');
-        Route::get('/progres/delete_doc/{id}', 'delete_doc');
-    });
     Route::group(['middleware' => ['cek_login:User']], function () {
         // Route::get('/profile', [\App\Http\Controllers\User\ProfileController::class, 'index'])->name('profile');
         // Route::get('/profesi', [\App\Http\Controllers\User\ProfesiController::class, 'index'])->name('profesi');

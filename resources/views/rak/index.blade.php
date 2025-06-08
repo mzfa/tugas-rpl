@@ -52,12 +52,14 @@
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
+                                            <th class="sort" data-sort="customer_nama">Nama Gudang</th>
                                             <th class="sort" data-sort="customer_nama">Nama Rak</th>
+                                            <th class="sort" data-sort="customer_nama">Kapasitas</th>
                                             <th class="sort" data-sort="action">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                        @php
+                                        {{-- @php
                                             $spacing = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';  
                                         @endphp
                                         @foreach ($data_rak as $item)
@@ -109,6 +111,19 @@
                                                     @endforeach
                                                 @endforeach
                                             @endforeach
+                                        @endforeach --}}
+                                        @foreach ($data as $item)
+                                            <tr>
+                                                <td>{{ $item->nama_gudang }}</td>
+                                                <td>{{ $item->nama }}</td>
+                                                <td>{{ $item->kapasitas }}</td>
+                                                <td>
+                                                    <button onclick="edit('{{ $item->rak_id }}')" class="btn btn-primary"> Edit</button>
+                                                    <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item->rak_id }}')"
+                                                            class="btn btn-danger text-white">Hapus</a>
+                                                    <a target="_blank" href="{{ url('rak/barcode/'.$item->rak_id) }}" class="btn btn-warning text-white">Barcode</a>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -156,15 +171,28 @@
                     <div class="mb-3 form-group">
                         <label>Referensi</label>
                         <select name="referensi_id" class="form-control">
-                            <option value="">Pilih Referensi Rak</option>
-                            @foreach ($rak as $item)
-                                <option value="{{ $item->rak_id }}">{{ $item->nama }}</option>
+                            <option value="">Pilih Referensi Gudang</option>
+                            @foreach ($gudang as $item)
+                                <option value="{{ $item->gudang_id }}">{{ $item->nama }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="staticEmail" class="form-label">Nama Rak</label>
                         <input type="text" class="form-control" id="nama" name="nama" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="staticEmail" class="form-label">Kapasitas</label>
+                        <input type="text" class="form-control" id="kapasitas" name="kapasitas" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="staticEmail" class="form-label">Barang</label>
+                        <select name="barang_id[]" class="form-control js-example-basic-multiple" multiple>
+                            <option value="">Pilih Referensi Barang</option>
+                            @foreach ($barang as $item)
+                                <option value="{{ $item->barang_id }}">{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -210,6 +238,9 @@
             success:function(tampil){
                 $('#tampildataRak').html(tampil);
                 $('#editModal').modal('show');
+                $(document).ready(function() {
+                    $('.js-example-basic-multiple').select2();
+                });
             } 
         })
     }

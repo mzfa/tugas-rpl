@@ -6,7 +6,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Analytics | Velzon - Admin & Dashboard Template</title>
+    <title>{{ env('APP_NAME_SCM') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -33,6 +33,25 @@
     {{-- <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>     --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- dropzone css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/dropzone/dropzone.css') }}" type="text/css" />
+
+    <link href="{{ asset('assets/css/custom.min.css" rel="stylesheet') }}" type="text/css" />
+
+    <style>
+        .select2-container {
+            z-index: 9999 !important;
+        }
+
+        .select2-dropdown {
+            z-index: 99999 !important;
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -48,19 +67,23 @@
                     <div class="navbar-brand-box horizontal-logo">
                         <a href="index.html" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                                {{-- <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22"> --}}
+                                SCM
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17">
+                                {{-- <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17"> --}}
+                                SCM
                             </span>
                         </a>
 
                         <a href="index.html" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                                {{-- <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22"> --}}
+                                SCM
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="17">
+                                {{-- <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="17"> --}}
+                                SCM
                             </span>
                         </a>
                     </div>
@@ -1417,6 +1440,13 @@
     <!-- listjs init -->
     <script src="{{ asset('assets/js/pages/listjs.init.js') }}"></script>
 
+    <!-- dropzone min -->
+    <script src="{{ asset('assets/libs/dropzone/dropzone-min.js') }}"></script>
+
+    <!-- Filepond css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/filepond/filepond.min.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
+
     
     <!-- Sweet alert init js-->
     {{-- <script src="{{ asset('assets/js/pages/sweetalerts.init.js') }}"></script> --}}
@@ -1449,6 +1479,60 @@
             });
         </script>
     @endif
+
+    <script>
+        function confirmation(message, jenis, link) {
+            Swal.fire({
+                title: "Yakin?",
+                text: message,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya!",
+                customClass: {
+                    confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+                    cancelButton: "btn btn-label-secondary waves-effect waves-light"
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.value) {
+                    Swal.fire({
+                        title: "Berhasil!",
+                        html: "Tunggu sebentar.",
+                        timer: 1000,
+                        showConfirmButton: false,
+                        customClass: {
+                            confirmButton: false
+                        },
+                        buttonsStyling: false,
+                        willOpen: function () {
+                            Swal.showLoading();
+                        }
+                    }).then(function (result) {
+                        var url = "{{ url('/') }}/" + link;
+                        window.location.href = url;
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Cancelled",
+                        html: "Okeeh kalo gajadi " + jenis + " :)",
+                        timer: 1000,
+                        showConfirmButton: false,
+                        customClass: {
+                            confirmButton: false
+                        },
+                        buttonsStyling: false,
+                        willOpen: function () {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
 
     @yield('scripts')
 </body>

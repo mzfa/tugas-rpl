@@ -23,6 +23,14 @@ class BarangController extends Controller
         $request->validate([
             'nama' => 'required|min:3|max:255',
         ]);
+        $nama_file = '';
+        if($request->hasFile('file')){
+            $file = round(microtime(true) * 1000).'-'.str_replace(' ','-',$request->file('file')->getClientOriginalName());
+            $nama_file = $file;
+            $request->file('file')->move(public_path('gambar/barang'), $file);
+            // $image = asset('gambar/'.$nama_file);
+        }
+        // die();
         $barang_terakhir = DB::select("SELECT max(kode_barang) as kodeTerbesar FROM barang WHERE deleted_at is null");
 
         $urutan = (int) substr($barang_terakhir[0]->kodeTerbesar, 3, 5);
@@ -43,6 +51,7 @@ class BarangController extends Controller
             'harga_beli' => $request->harga_beli,
             'lokasi' => $request->lokasi,
             'keterangan' => $request->keterangan,
+            'gambar' => $nama_file,
         ];
         DB::table('barang')->insert($data);
 
@@ -60,6 +69,15 @@ class BarangController extends Controller
         $request->validate([
             'nama' => 'required|min:3|max:255',
         ]);
+        $nama_file = $request->gambar;
+        // dd($nama_file);
+        if($request->hasFile('file')){
+            $file = round(microtime(true) * 1000).'-'.str_replace(' ','-',$request->file('file')->getClientOriginalName());
+            $nama_file = $file;
+            echo $request->file('file')->move(public_path('gambar/barang'), $file);
+            // $image = asset('gambar/'.$nama_file);
+        }
+        
         $data = [
             'updated_by' => Auth::user()->id,
             'updated_at' => now(),
@@ -72,6 +90,7 @@ class BarangController extends Controller
             'harga_beli' => $request->harga_beli,
             'lokasi' => $request->lokasi,
             'keterangan' => $request->keterangan,
+            'gambar' => $nama_file
         ];
         // dd($request);
         DB::table('barang')->where(['barang_id' => $request->barang_id])->update($data);

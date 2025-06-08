@@ -9,12 +9,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                    <h4 class="mb-sm-0">Listjs</h4>
+                    <h4 class="mb-sm-0">Data Permintaan</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
-                            <li class="breadcrumb-item active">Listjs</li>
+                            <li class="breadcrumb-item active">Data Permintaan</li>
                         </ol>
                     </div>
 
@@ -27,7 +27,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Add, Edit & Remove</h4>
+                        <h4 class="card-title mb-0">Data Permintaan</h4>
                     </div><!-- end card header -->
 
                     <div class="card-body">
@@ -52,32 +52,26 @@
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th class="sort" data-sort="customer_nama">Nama</th>
-                                            <th class="sort" data-sort="customer_username">Username</th>
-                                            <th class="sort" data-sort="customer_password">Password</th>
-                                            <th class="sort" data-sort="customer_level_user">Level User</th>
+                                            <th class="sort" data-sort="customer_nama">Tanggal Permintaan</th>
+                                            <th class="sort" data-sort="customer_nama">Kode</th>
+                                            <th class="sort" data-sort="customer_nama">Keterangan</th>
                                             <th class="sort" data-sort="action">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
+                                        @php
+                                            $spacing = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';  
+                                        @endphp
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td class="customer_nama">{{ $item->name }}</td>
-                                                <td class="customer_username">{{ $item->username }}</td>
-                                                <td class="customer_password">{{ $item->password }}</td>
-                                                <td class="customer_level_user">{{ $item->nama_hakakses }}</td>
+                                                <td>{{ $item->tanggal }}</td>
+                                                <td>{{ $item->kode }}</td>
+                                                <td>{{ $item->keterangan }}</td>
                                                 <td>
-                                                    <div class="d-flex gap-2">
-                                                        <div class="edit">
-                                                            <button class="btn btn-sm btn-success edit-item-btn" onclick="return edit({{ $item->id }})">Ubah</button>
-                                                        </div>
-                                                        <div class="remove">
-                                                            <a class="btn btn-sm btn-danger remove-item-btn" onclick="return confirm('Apakah anda yakin ini di hapus?')" href="{{ url('user/delete/' . Crypt::encrypt($item->id)) }}">Remove</a>
-                                                        </div>
-                                                        <div class="hak_akses">
-                                                            <button class="btn btn-sm btn-danger remove-item-btn" onclick="return akses({{ $item->id }})">Kasih Akses</button>
-                                                        </div>
-                                                    </div>
+                                                    <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-warning"> Detail</button>
+                                                    <button onclick="edit('{{ $item->permintaan_id }}')" class="btn btn-primary"> Edit</button>
+                                                    <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','permintaan/delete/{{ $item->permintaan_id }}')"
+                                                            class="btn btn-danger text-white">Hapus</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -114,31 +108,9 @@
     </div>
 </div>
 
-<div class="modal fade" id="aksesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="aksesModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <form action="{{ url('user/update') }}" method="post">
-        @csrf
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="aksesModalLabel">User Akses</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="tampildata"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </div>
-    </form>
-    </div>
-</div>
-
-
 <div class="modal fade" id="basicModal" tabindex="-1">
     <div class="modal-dialog">
-        <form action="{{ url('user/store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('permintaan/store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -147,25 +119,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="staticEmail" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="staticEmail" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="staticEmail" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <label for="staticEmail" class="form-label">Tanggal permintaan</label>
+                        <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                     </div>
                     <div class="mb-3">
                         <label for="staticEmail" class="form-label">Bagian</label>
-                        <select name="bagian_id" id="bagian_id" class="form-control">
+                        <select name="bagian_id" id="bagian_id" class="form-control" required>
                             <option value=""></option>
                             @foreach ($bagian as $item)
                                 <option value="{{ $item->bagian_id }}">{{ $item->nama_bagian }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="staticEmail" class="form-label">Keterangan</label>
+                        <textarea name="keterangan" id="keterangan" cols="30" rows="3" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,9 +145,9 @@
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1"> 
+<div class="modal fade ml" id="editModal" tabindex="-1"> 
     <div class="modal-dialog">
-      <form action="{{ url('user/updateUser') }}" method="post">
+      <form action="{{ url('permintaan/update') }}" method="post">
         @csrf
           <div class="modal-content">
               <div class="modal-header">
@@ -187,7 +155,27 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <div id="tampildatauser"></div>
+                  <div id="tampildatapermintaan"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+          </div>
+      </form>
+    </div>
+</div>
+<div class="modal modal-xl fade" id="detailModal" tabindex="-1"> 
+    <div class="modal-dialog">
+      <form action="{{ url('permintaan/update_detail') }}" method="post">
+        @csrf
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div id="tampildetailpermintaan"></div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -203,25 +191,25 @@
 
 @section('scripts')
 <script>
-    function akses(id){
-        $.ajax({ 
-            type : 'get',
-            url : "{{ url('user/edit')}}/"+id,
-            // data:{'id':id}, 
-            success:function(tampil){
-                $('#tampildata').html(tampil);
-                $('#aksesModal').modal('show');
-            } 
-        })
-    }
     function edit(id){
         $.ajax({ 
             type : 'get',
-            url : "{{ url('user/editUser')}}/"+id,
+            url : "{{ url('permintaan/edit')}}/"+id,
             // data:{'id':id}, 
             success:function(tampil){
-                $('#tampildatauser').html(tampil);
+                $('#tampildatapermintaan').html(tampil);
                 $('#editModal').modal('show');
+            } 
+        })
+    }
+    function detail(id){
+        $.ajax({ 
+            type : 'get',
+            url : "{{ url('permintaan/detail')}}/"+id,
+            // data:{'id':id}, 
+            success:function(tampil){
+                $('#tampildetailpermintaan').html(tampil);
+                $('#detailModal').modal('show');
             } 
         })
     }

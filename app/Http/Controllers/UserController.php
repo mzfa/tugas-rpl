@@ -27,7 +27,8 @@ class UserController extends Controller
             'hakakses.nama_hakakses',
         ])->whereNull('users.deleted_at')->get();
         $pegawai = DB::table('pegawai')->whereNull('pegawai.deleted_at')->get();
-        return view('user', compact('data','pegawai'));
+        $bagian = DB::table('bagian')->whereNull('bagian.deleted_at')->get();
+        return view('user', compact('data','pegawai','bagian'));
     }
 
     public function store(Request $request){
@@ -54,8 +55,8 @@ class UserController extends Controller
         // dd($data);
         $text = "Data tidak dapat di ubah";
         $pegawai = DB::table('pegawai')->whereNull('pegawai.deleted_at')->get();
+        $bagian = DB::table('bagian')->whereNull('bagian.deleted_at')->get();
         if($data = DB::select("SELECT * FROM users WHERE id='$id'")){
-
             $text = '<div class="mb-3">'.
                     '<label for="staticEmail" class="form-label">Nama Lengkap</label>'.
                     '<input type="text" class="form-control" id="name" name="name" value="'.$data[0]->name.'" required>'.
@@ -67,6 +68,20 @@ class UserController extends Controller
                 '<div class="mb-3">'.
                 '<label for="staticEmail" class="form-label">Password</label>'.
                 '<input type="password" class="form-control" id="password" name="password" value="'.$data[0]->password.'" required>'.
+            '</div>'.
+            '<div class="mb-3">'.
+                '<label for="staticEmail" class="form-label">Bagian</label>'.
+                '<select class="form-control" name="bagian_id">'. 
+                '<option></option>';
+                foreach ($bagian as $value) {
+                    
+                    if($data[0]->bagian_id == $value->bagian_id){
+                        $text .= '<option selected value="'.$value->bagian_id.'">'.$value->nama_bagian.'</option>';
+                    }else{
+                        $text .= '<option value="'.$value->bagian_id.'">'.$value->nama_bagian.'</option>';
+                    }
+                }
+                $text .= '</select>'.
             '</div>'.
             '<input type="hidden" class="form-control" id="id" name="id" value="'.Crypt::encrypt($data[0]->id) .'" required>';
         }
@@ -86,6 +101,7 @@ class UserController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'password' => $request->password,
+            'bagian_id' => $request->bagian_id,
         ];
         $id = Crypt::decrypt($request->id);
         $status_departement = "Aktif";
@@ -110,6 +126,7 @@ class UserController extends Controller
         $hakakses = DB::table('hakakses')->get();
         if($data = DB::table('users')->leftJoin('user_akses', 'users.id', '=', 'user_akses.user_id')->where(['users.id' => $id])->first()){
         // dd($data);
+        $bagian = DB::table('bagian')->whereNull('bagian.deleted_at')->get();
         $text = '<div class="mb-3 row">'.
                     '<input type="hidden" name="user_id" value="'.Crypt::encrypt($id).'">'.
                     '<input type="hidden" name="user_akses_id" value="'.Crypt::encrypt($data->user_akses_id).'">'.
@@ -122,6 +139,18 @@ class UserController extends Controller
                             $text .= '<option checked value="'.$value->hakakses_id.'">'.$value->nama_hakakses.'</option>';
                         }else{
                             $text .= '<option value="'.$value->hakakses_id.'">'.$value->nama_hakakses.'</option>';
+                        }
+                    }
+                    $text .= '</select>'.
+                    '</div>'.
+                    '<div class="col-sm-12">'.
+                    '<select class="form-control" name="bagian_id">'. 
+                    '<option></option>';
+                    foreach ($bagian as $value) {
+                        if($data->user_akses_id == $value->bagian_id){
+                            $text .= '<option checked value="'.$value->bagian_id.'">'.$value->nama_bagian.'</option>';
+                        }else{
+                            $text .= '<option value="'.$value->bagian_id.'">'.$value->nama_bagian.'</option>';
                         }
                     }
                     $text .= '</select>'.
