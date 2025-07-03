@@ -118,7 +118,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="staticEmail" class="form-label">Tanggal Pemesanan</label>
                         <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                     </div>
@@ -130,10 +130,10 @@
                                 <option value="{{ $item->supplier_id }}">{{ $item->nama }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
                     <div class="mb-3">
-                        <label for="staticEmail" class="form-label">Keterangan</label>
-                        <textarea name="keterangan" id="keterangan" cols="30" rows="3" class="form-control"></textarea>
+                        <label for="staticEmail" class="form-label">File</label>
+                        <input type="file" name="file" required class="form-control ">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -179,7 +179,6 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
               </div>
           </div>
       </form>

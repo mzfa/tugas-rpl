@@ -48,8 +48,8 @@
                                 </div>
                             </div>
 
-                            <div class="table-responsive table-card mt-3 mb-1">
-                                <table class="table align-middle table-nowrap" id="customerTable">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="sort" data-sort="customer_nama">Nama Gudang</th>

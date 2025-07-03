@@ -68,10 +68,24 @@
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ $item->keterangan }}</td>
                                                 <td>
-                                                    <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-warning"> Detail</button>
-                                                    <button onclick="edit('{{ $item->permintaan_id }}')" class="btn btn-primary"> Edit</button>
-                                                    <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','permintaan/delete/{{ $item->permintaan_id }}')"
-                                                            class="btn btn-danger text-white">Hapus</a>
+                                                    @if ($item->flag_selesai == 1)
+                                                        <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-info"> 
+                                                            Proses
+                                                        </button>
+                                                    @elseif($item->flag_selesai == 2)
+                                                        <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-danger"> 
+                                                            Terima
+                                                        </button>
+                                                    @elseif($item->flag_selesai == 3)
+                                                        <span class="badge bg-primary">Transaksi Selesai</span>
+                                                    @else
+                                                        <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-warning"> 
+                                                            Detail
+                                                        </button>
+                                                        <button onclick="edit('{{ $item->permintaan_id }}')" class="btn btn-primary"> Edit</button>
+                                                        <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','permintaan/delete/{{ $item->permintaan_id }}')"
+                                                                class="btn btn-danger text-white">Hapus</a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

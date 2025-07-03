@@ -38,33 +38,28 @@
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#basicModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>
                                     </div>
                                 </div>
-                                <div class="col-sm">
-                                    <div class="d-flex justify-content-sm-end">
-                                        <div class="search-box ms-2">
-                                            <input type="text" class="form-control search" placeholder="Search...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-
-                            <div class="table-responsive table-card mt-3 mb-1">
-                                <table class="table align-middle table-nowrap" id="customerTable">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
                                     <thead class="table-light">
                                         <tr>
-                                            <th class="sort" data-sort="customer_nama">Gambar</th>
-                                            <th class="sort" data-sort="customer_nama">Nama Barang</th>
-                                            <th class="sort" data-sort="customer_nama">Kode Barang</th>
-                                            <th class="sort" data-sort="customer_nama">Satuan</th>
-                                            <th class="sort" data-sort="customer_nama">Lokasi</th>
-                                            <th class="sort" data-sort="action">Action</th>
+                                            <th>Gambar</th>
+                                            <th>Nama Barang</th>
+                                            <th>Kode Barang</th>
+                                            <th>Satuan</th>
+                                            <th>Lokasi</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td class="customer_name"><img src="{{ url('gambar/barang/'.$item->gambar) }}" alt="Kosong" width="50px"></td>
-                                                <td class="customer_name">{{ $item->nama }}</td>
+                                                <td class="customer_name">
+                                                    <a target="_blank" href="{{ url('gambar/barang/'.$item->gambar) }}">
+                                                        <img src="{{ url('gambar/barang/'.$item->gambar) }}" alt="Kosong" width="50px">
+                                                    </a>
+                                                </td>
+                                                <td class="customer_barang">{{ $item->nama }}</td>
                                                 <td class="customer_name">{{ $item->kode_barang }}</td>
                                                 <td class="customer_name">{{ $item->satuan }}</td>
                                                 <td class="customer_name">{{ $item->lokasi }}</td>
@@ -82,25 +77,13 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
+                                {{-- <div class="noresult" style="display: none">
                                     <div class="text-center">
                                         <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
                                         <h5 class="mt-2">Sorry! No Result Found</h5>
                                         <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any orders for you search.</p>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <div class="pagination-wrap hstack gap-2">
-                                    <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                        Previous
-                                    </a>
-                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                    <a class="page-item pagination-next" href="javascript:void(0);">
-                                        Next
-                                    </a>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div><!-- end card -->

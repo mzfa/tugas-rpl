@@ -38,80 +38,19 @@
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#basicModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>
                                     </div>
                                 </div>
-                                <div class="col-sm">
-                                    <div class="d-flex justify-content-sm-end">
-                                        <div class="search-box ms-2">
-                                            <input type="text" class="form-control search" placeholder="Search...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="table-responsive table-card mt-3 mb-1">
-                                <table class="table align-middle table-nowrap" id="customerTable">
-                                    <thead class="table-light">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
+                                    <thead>
                                         <tr>
-                                            <th class="sort" data-sort="customer_nama">Nama Gudang</th>
-                                            <th class="sort" data-sort="customer_nama">Nama Rak</th>
-                                            <th class="sort" data-sort="customer_nama">Kapasitas</th>
-                                            <th class="sort" data-sort="action">Action</th>
+                                            <th>Nama Gudang</th>
+                                            <th>Nama Rak</th>
+                                            <th>Kapasitas</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="list form-check-all">
-                                        {{-- @php
-                                            $spacing = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';  
-                                        @endphp
-                                        @foreach ($data_rak as $item)
-                                            <tr>
-                                                <td>{{ $item['nama'] }}</td>
-                                                <td>
-                                                    <button onclick="edit('{{ $item['rak_id'] }}')" class="btn btn-primary"> Edit</button>
-                                                    <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item['rak_id'] }}')"
-                                                            class="btn btn-danger text-white">Hapus</a>
-                                                </td>
-                                            </tr>
-                                            @foreach ($item['sub_rak'] as $item1)
-                                                <tr>
-                                                    <td>{!! $spacing !!}{{ $item1['nama'] }}</td>
-                                                    <td>
-                                                        <button onclick="edit('{{ $item1['rak_id'] }}')" class="btn btn-primary"> Edit</button>
-                                                        <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item1['rak_id'] }}')"
-                                                                class="btn btn-danger text-white">Hapus</a>
-                                                    </td>
-                                                </tr>
-                                                @foreach ($item1['sub_rak'] as $item2)
-                                                    <tr>
-                                                        <td>{!! $spacing. $spacing !!}{{ $item2['nama'] }}</td>
-                                                        <td>
-                                                            <button onclick="edit('{{ $item2['rak_id'] }}')" class="btn btn-primary"> Edit</button>
-                                                            <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item2['rak_id'] }}')"
-                                                                    class="btn btn-danger text-white">Hapus</a>
-                                                        </td>
-                                                    </tr>
-                                                    @foreach ($item2['sub_rak'] as $item3)
-                                                        <tr>
-                                                            <td>{!!  $spacing. $spacing. $spacing !!}{{ $item3['nama'] }}</td>
-                                                            <td>
-                                                                <button onclick="edit('{{ $item3['rak_id'] }}')" class="btn btn-primary"> Edit</button>
-                                                                <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item3['rak_id'] }}')"
-                                                                        class="btn btn-danger text-white">Hapus</a>
-                                                            </td>
-                                                        </tr>
-                                                        @foreach ($item3['sub_rak'] as $item4)
-                                                            <tr>
-                                                                <td>{!!  $spacing. $spacing. $spacing.$spacing !!}{{ $item4['nama'] }}</td>
-                                                                <td>
-                                                                    <button onclick="edit('{{ $item4['rak_id'] }}')" class="btn btn-primary"> Edit</button>
-                                                                    <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item4['rak_id'] }}')"
-                                                                            class="btn btn-danger text-white">Hapus</a>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach --}}
+                                    <tbody>
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $item->nama_gudang }}</td>
@@ -127,25 +66,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any orders for you search.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <div class="pagination-wrap hstack gap-2">
-                                    <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                        Previous
-                                    </a>
-                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                    <a class="page-item pagination-next" href="javascript:void(0);">
-                                        Next
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div><!-- end card -->

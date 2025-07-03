@@ -34,15 +34,27 @@
             html5QRCodeScanner.clear();
             $.ajax({ 
                 type : 'get',
-                url : "{{ url('penerimaan/terima_barang/'.$penerimaan->id)}}/"+id,
+                url : "{{ url('penerimaan/terima_barang/'.$penerimaan_detail->penerimaan_detail_id)}}/"+id,
                 // data:{'id':id}, 
                 success:function(tampil){
-                    Swal.fire({
-                        icon: "success",
-                        title: tampil,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    if(tampil[0] == 'error'){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal",
+                            text: tampil[1],
+                            showConfirmButton: false,
+                            // timer: 1500
+                        });
+                        html5QRCodeScanner.render(onScanSuccess);
+                    }else{
+                        Swal.fire({
+                            icon: "success",
+                            title: "Berhasil",
+                            text: tampil[1],
+                            showConfirmButton: false,
+                            // timer: 1500
+                        });
+                    }
                 } 
             })
             // membersihkan scan area ketika sudah menjalankan 

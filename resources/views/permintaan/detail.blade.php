@@ -1,6 +1,13 @@
 @php
-    $status = ($permintaan->flag_selesai == 1) ? 'readonly' : '';
+    $status = ($permintaan->flag_selesai !== null) ? 'readonly' : '';
 @endphp
+@if ($permintaan->flag_selesai == 1)
+    <input type="hidden" name="status" value="proses">
+@elseif($permintaan->flag_selesai == 2)
+    <input type="hidden" name="status" value="terima">
+@else
+    <input type="hidden" name="status" value="minta">
+@endif
 <div class="table-responsive">
     <table class="table align-middle table-nowrap" id="customerTable">
         <thead class="table-light">
@@ -19,7 +26,7 @@
             </tr>
         </thead>
         <tbody class="list form-check-all">
-            @foreach ($barang as $item)
+            @foreach ($data_barang as $item)
                 <tr>
                     <th scope="row">
                         <div class="form-check">
@@ -29,15 +36,16 @@
                     <td class="customer_name">{{ $item->nama_barang }}</td>
                     <td class="customer_name">{{ $item->batch }}</td>
                     <td class="customer_name">{{ $item->expired }}</td>
-                    <td class="customer_name">{{ $item->nama_gudang.' | '.$item->nama_rak }}</td>
+                    <td class="customer_name">{{ $item->nama_bagian.' | '.$item->nama_rak }}</td>
                     <td class="customer_name">{{ $item->jumlah_barang }}</td>
                     <td class="customer_name">
-                        <input type="number" class="form-control" {{ $status }} name="jumlah[{{ $item->barang_id }}]" value="{{ $jumlah[$item->barang_id] ?? '' }}" max="{{ $item->jumlah_barang }}">
+                        <input type="number" max="{{ $item->jumlah_barang }}" class="form-control" {{ $status }} name="jumlah[{{ $item->barang_id }}]" value="{{ $jumlah[$item->barang_id] ?? '' }}" max="{{ $item->jumlah_barang }}">
                         <input type="hidden" class="form-control" name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
                         <input type="hidden" class="form-control" name="barang_id[{{ $item->barang_id }}]" value="{{ $item->barang_id }}">
                         <input type="hidden" class="form-control" name="rak_id[{{ $item->barang_id }}]" value="{{ $item->rak_id }}">
                         <input type="hidden" class="form-control" name="expired[{{ $item->barang_id }}]" value="{{ $item->expired }}">
                         <input type="hidden" class="form-control" name="batch[{{ $item->barang_id }}]" value="{{ $item->batch }}">
+                        <input type="hidden" class="form-control" name="satuan[{{ $item->barang_id }}]" value="{{ $item->batch }}">
                         <input type="hidden" class="form-control" name="jumlah_barang[{{ $item->barang_id }}]" value="{{ $item->jumlah_barang }}">
                     </td>
                 </tr>

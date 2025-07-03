@@ -13,7 +13,9 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $data = DB::table('barang')->whereNull('deleted_at')->get();
+        $data = DB::table('barang')
+            // ->where('created_at', '>', date('Y-m-d'))
+            ->whereNull('deleted_at')->get();
         // dd($data_barang);
         return view('barang.index', compact('data'));
     }

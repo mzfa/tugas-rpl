@@ -70,8 +70,8 @@
                                                     @if ($item->flag_selesai != 1)
                                                         <button onclick="detail('{{ $item->pemesanan_id }}')" class="btn btn-warning"> Buat DO</button>
                                                     @else
-                                                        <span class="badge bg-primary">Barang Sudah di terima semua</span>
-                                                        <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-warning text-white">.</a>
+                                                        {{-- <span class="badge bg-primary">Barang Sudah di terima semua</span> --}}
+                                                        <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-primary text-white">Detail</a>
                                                     @endif
                                                 </td>
                                             </tr>

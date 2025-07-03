@@ -58,6 +58,25 @@ class PermintaanController extends Controller
     }
     public function detail(string $id)
     {
+        $data_barang = DB::table('permintaan')
+            ->join('stock_real','stock_real.bagian_id','permintaan.bagian_id')
+            ->join('bagian','bagian.bagian_id','stock_real.bagian_id')
+            ->join('barang','barang.barang_id','stock_real.barang_id')
+            ->join('rak','rak.rak_id','stock_real.rak_id')
+            ->select(
+                'barang.nama as nama_barang',
+                'rak.nama as nama_rak',
+                'barang.satuan',
+                'bagian.nama_bagian',
+                'stock_real.batch',
+                'stock_real.expired',
+                'stock_real.barang_id',
+                'stock_real.rak_id',
+                'stock_real.jumlah_barang',
+            )
+            ->where('permintaan_id', $id)
+            ->get();
+        // dd($data_barang);
         $data = DB::table('permintaan_detail')->where('permintaan_id', $id)->get();
         $permintaan = DB::table('permintaan')->where('permintaan_id', $id)->first();
         $permintaan_detail = [];
@@ -66,22 +85,7 @@ class PermintaanController extends Controller
             array_push($permintaan_detail,$item->barang_id);
             $jumlah[$item->barang_id] = $item->jumlah;
         }
-        // dd($jumlah);
-        $barang = DB::table('stock_real')
-            ->select(
-                'barang.nama as nama_barang',
-                'stock_real.*',
-                'barang.satuan',
-                'gudang.nama as nama_gudang',
-                'rak.nama as nama_rak',
-            )
-            ->leftJoin('barang','stock_real.barang_id','barang.barang_id')
-            ->leftJoin('rak','rak.rak_id','stock_real.rak_id')
-            ->leftJoin('gudang','gudang.gudang_id','rak.referensi_id')
-            ->whereNull('stock_real.deleted_at')
-            ->where('stock_real.bagian_id',1)
-            ->get();
-        return view('permintaan.detail', compact('permintaan_detail','barang','id','jumlah','permintaan'));
+        return view('permintaan.detail', compact('permintaan_detail','id','data_barang','jumlah','permintaan','data'));
     }
 
     public function update(Request $request)
@@ -103,43 +107,77 @@ class PermintaanController extends Controller
         $data = [];
         $bagian_id = Auth::user()->bagian_id;
         $permintaan_id = $request->permintaan_id;
+        $status = $request->status;
 
-        foreach($request->barang_id as $barang){
-            $stock_real = DB::table('stock_real')->where(['rak_id' => $request->rak_id[$barang],'batch' => $request->batch[$barang],'expired' => $request->expired[$barang],'bagian_id' => $bagian_id])->first();
-            if(empty($stock_real)){
-                $datanya = [
-                    'created_by' => Auth::user()->id,
-                    'created_at' => now(),
-                    'barang_id' => $barang,
-                    'batch' => $request->batch[$barang],
-                    'rak_id' => $request->rak_id[$barang],
-                    'expired' => $request->expired[$barang],
-                    'jumlah_barang' => $request->jumlah[$barang],
-                    'bagian_id' => $bagian_id,
-                ];
-                // dd($datanya);
-                DB::table('stock_real')->insert($datanya);
-            }else{
-                $jumlahnya =  $request->jumlah[$barang] + $stock_real->jumlah_barang;
-                $datanya = [
-                    'updated_by' => Auth::user()->id,
-                    'updated_at' => now(),
-                    'expired' => $request->expired[$barang],
-                    'jumlah_barang' => $jumlahnya,
-                    'bagian_id' => $bagian_id,
-                ];
-                $stock_real_id = $stock_real->stock_real_id;
-                // dd($datanya);
-                DB::table('stock_real')->where(['stock_real_id' => $stock_real_id])->update($datanya);
+        if($status == "terima"){
+            foreach($request->barang_id as $barang){
+                $stock_real = DB::table('stock_real')->where(['rak_id' => $request->rak_id[$barang],'batch' => $request->batch[$barang],'expired' => $request->expired[$barang],'bagian_id' => $bagian_id])->first();
+                if(empty($stock_real)){
+                    $datanya = [
+                        'created_by' => Auth::user()->id,
+                        'created_at' => now(),
+                        'barang_id' => $barang,
+                        'batch' => $request->batch[$barang],
+                        'rak_id' => $request->rak_id[$barang],
+                        'expired' => $request->expired[$barang],
+                        'jumlah' => $request->jumlah[$barang],
+                        'permintaan_id' => $permintaan_id,
+                    ];
+                    // dd($datanya);
+                    DB::table('stock_real')->insert($datanya);
+                }else{
+                    $jumlahnya =  $request->jumlah[$barang] + $stock_real->jumlah_barang;
+                    $datanya = [
+                        'updated_by' => Auth::user()->id,
+                        'updated_at' => now(),
+                        'expired' => $request->expired[$barang],
+                        'jumlah_barang' => $jumlahnya,
+                        'bagian_id' => $bagian_id,
+                    ];
+                    $stock_real_id = $stock_real->stock_real_id;
+                    // dd($datanya);
+                    DB::table('stock_real')->where(['stock_real_id' => $stock_real_id])->update($datanya);
+                }
             }
+            $data2 = [
+                'updated_by' => Auth::user()->id,
+                'updated_at' => now(),
+                'flag_selesai' => 3,
+            ];
+            DB::table('permintaan')->where(['permintaan_id' => $permintaan_id])->update($data2);
+            return Redirect::back()->with(['success' => 'Barang Berhasil Di Terima Semua!']);
+        }elseif($status == "proses"){
+            $data2 = [
+                'updated_by' => Auth::user()->id,
+                'updated_at' => now(),
+                'flag_selesai' => 2,
+            ];
+            DB::table('permintaan')->where(['permintaan_id' => $permintaan_id])->update($data2);
+            return Redirect::back()->with(['success' => 'Barang Sedang di proses!']);
+        }else{
+            $datanya = [];
+            foreach($request->barang_id as $barang){
+                $datanya[] = [
+                        'barang_id' => $barang,
+                        'batch' => $request->batch[$barang],
+                        'rak_id' => $request->rak_id[$barang],
+                        'expired' => $request->expired[$barang],
+                        'jumlah' => $request->jumlah[$barang],
+                        'permintaan_id' => $permintaan_id,
+                        'satuan' => $request->satuan[$barang],
+                ];
+                // dd($datanya);
+            }
+            DB::table('permintaan_detail')->insert($datanya);
+            $data2 = [
+                'updated_by' => Auth::user()->id,
+                'updated_at' => now(),
+                'flag_selesai' => 1,
+            ];
+            DB::table('permintaan')->where(['permintaan_id' => $permintaan_id])->update($data2);
+            return Redirect::back()->with(['success' => 'Data Berhasil Di Ubah!']);
         }
-        $data2 = [
-            'updated_by' => Auth::user()->id,
-            'updated_at' => now(),
-            'flag_selesai' => 1,
-        ];
-        DB::table('permintaan')->where(['permintaan_id' => $permintaan_id])->update($data2);
-        return Redirect::back()->with(['success' => 'Data Berhasil Di Ubah!']);
+
     }
 
     public function delete(string $id)
