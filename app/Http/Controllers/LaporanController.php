@@ -16,20 +16,47 @@ class LaporanController extends Controller
         $data = DB::table('penerimaan')
             ->select(
                 'pemesanan.kode as kode_pemesanan',
+                'pemesanan.purchasing_document',
                 'pemesanan.tanggal as tanggal_pemesanan',
                 'penerimaan.kode as kode_penerimaan',
                 'penerimaan.tanggal as tanggal_penerimaan',
+                'penerimaan_detail.terima',
                 'users.name as petugas',
                 'supplier.nama as nama_supplier',
+                'barang.nama as nama_barang',
+                'barang.barang_id',
+                'barang.satuan',
             )
             ->join('pemesanan','pemesanan.pemesanan_id','penerimaan.pemesanan_id')
+            ->join('penerimaan_detail','penerimaan_detail.penerimaan_id','penerimaan.id')
+            ->join('barang','barang.barang_id','penerimaan_detail.barang_id')
             ->join('supplier','supplier.supplier_id','pemesanan.supplier_id')
             ->join('users','users.id','penerimaan.created_by')
             ->whereNull('penerimaan.deleted_at')
             ->whereNull('pemesanan.deleted_at')
+            ->whereNotNull('penerimaan_detail.flag_selesai')
             ->get();
+        $data_penerimaan = [];
+        $detail_penerimaan = [];
+        foreach($data as $item){
+            $data_penerimaan[$item->kode_penerimaan] = [
+                "kode_pemesanan" => $item->kode_pemesanan,
+                "purchasing_document" => $item->purchasing_document,
+                "tanggal_pemesanan" => $item->tanggal_pemesanan,
+                "kode_penerimaan" => $item->kode_penerimaan,
+                "tanggal_penerimaan" => $item->tanggal_penerimaan,
+                "petugas" => $item->petugas,
+                "nama_supplier" => $item->nama_supplier,
+            ];
+            $detail_penerimaan[$item->kode_penerimaan][$item->barang_id] = [  
+                "nama_barang" => $item->nama_barang,
+                "barang_id" => $item->barang_id,
+                "terima" => $item->terima,
+                "satuan" => $item->satuan,
+            ];
+        }
         // dd($data_supplier);
-        return view('laporan.penerimaan', compact('data'));
+        return view('laporan.penerimaan', compact('data_penerimaan','detail_penerimaan'));
     }
     public function permintaan()
     {

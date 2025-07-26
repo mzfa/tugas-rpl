@@ -35,22 +35,32 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Nomor PO</th>
+                                        <th>Kode</th>
                                         <th>Tanggal Pemesanan</th>
                                         <th>Kode Penerimaan</th>
                                         <th>Tanggal Penerimaan</th>
                                         <th>Supplier</th>
                                         <th>Penerima</th>
+                                        <th>Barang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $item)
+                                    @foreach ($data_penerimaan as $key => $item)
                                         <tr>
-                                            <td class="customer_name">{{ $item->kode_pemesanan }}</td>
-                                            <td class="customer_name">{{ $item->tanggal_pemesanan }}</td>
-                                            <td class="customer_name">{{ $item->kode_penerimaan }}</td>
-                                            <td class="customer_name">{{ $item->tanggal_penerimaan }}</td>
-                                            <td class="customer_name">{{ $item->nama_supplier }}</td>
-                                            <td class="customer_name">{{ $item->petugas }}</td>
+                                            <td class="customer_name">{{ $item['purchasing_document'] }}</td>
+                                            <td class="customer_name">{{ $item['kode_pemesanan'] }}</td>
+                                            <td class="customer_name">{{ $item['tanggal_pemesanan'] }}</td>
+                                            <td class="customer_name">{{ $item['kode_penerimaan'] }}</td>
+                                            <td class="customer_name">{{ $item['tanggal_penerimaan'] }}</td>
+                                            <td class="customer_name">{{ $item['nama_supplier'] }}</td>
+                                            <td class="customer_name">{{ $item['petugas'] }}</td>
+                                            <td class="customer_name">
+                                                <ul>
+                                                    @foreach ($detail_penerimaan[$key] as $detail)
+                                                        <li>{{ $detail['nama_barang'] }} ({{ $detail['terima']. ' ' . $detail['satuan'] }})</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
