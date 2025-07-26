@@ -13,7 +13,10 @@ class PenerimaanController extends Controller
 {
     public function index()
     {
-        $data = DB::table('pemesanan')->whereNull('deleted_at')->get();
+        $data = DB::table('pemesanan')
+            ->select('pemesanan.*','penerimaan.id','penerimaan.faktur')
+            ->leftJoin('penerimaan','penerimaan.pemesanan_id','pemesanan.pemesanan_id')
+            ->whereNull('pemesanan.deleted_at')->get();
         $supplier = DB::table('supplier')->whereNull('deleted_at')->get();
         // dd($data_pemesanan);
         return view('penerimaan.index', compact('data','supplier'));
@@ -214,6 +217,7 @@ class PenerimaanController extends Controller
             // dump($barang);
             $jumlah_barang_sebelumnya += $request->jumlah_sebelumnya[$barang];
             $jumlah_barang_do += $request->terima[$barang];
+            // $penerimaan_detail_sebelumnya = DB::table('penerimaan_detail')->where(['penerimaan_id' => $request->penerimaan_id])->where('barang_id',$barang)->first;
             $data[] = [
                 'barang_id' => $barang,
                 'pemesanan_detail_id' => $request->pemesanan_detail_id[$barang],

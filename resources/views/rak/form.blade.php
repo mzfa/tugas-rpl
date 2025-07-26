@@ -11,10 +11,11 @@
     <label for="staticEmail" class="form-label">Nama Rak</label>
     <input type="text" class="form-control" id="nama" name="nama" value="{{ $data->nama }}" required>
 </div>
-<div class="mb-3">
+{{-- <div class="mb-3">
     <label for="staticEmail" class="form-label">Kapasitas</label>
     <input type="number" class="form-control" id="kapasitas" name="kapasitas" value="{{ $data->kapasitas }}" required>
-</div>
+</div> --}}
+<input type="hidden" class="form-control" id="kapasitas" name="kapasitas" value="{{ $data->kapasitas ?? 0 }}">
 <div class="mb-3">
     <label for="staticEmail" class="form-label">Barang</label>
     <select name="barang_id[]" class="form-control js-example-basic-multiple" multiple>

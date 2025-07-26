@@ -46,7 +46,7 @@
                     <td class="customer_name">{{ $item->satuan }}</td>
                     <td class="customer_name">{{ $jumlah[$item->barang_id] ?? '' }}</td>
                     <td class="customer_name">
-                        <input type="number" class="form-control" {{ $disable }} name="terima[{{ $item->barang_id }}]" max="{{ $jumlah[$item->barang_id] ?? 0 }}" value="{{ $item->terima ?? '' }}" required>
+                        <input type="number" class="form-control" {{ $disable }} name="terima[{{ $item->barang_id }}]" max="{{ $jumlah[$item->barang_id] ?? 0 }}" value="{{ $item->terima ?? '' }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="jumlah_sebelumnya[{{ $item->barang_id }}]" value="{{ $jumlah[$item->barang_id] ?? '' }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="harga_jual[{{ $item->barang_id }}]" value="{{ $item->harga_jual }}">
@@ -54,9 +54,9 @@
                         <input type="hidden" class="form-control" {{ $disable }} name="penerimaan_detail_id[{{ $item->barang_id }}]" value="{{ $pemesanan_detail_id[$item->barang_id] ?? '' }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="penerimaan_id" value="{{ $penerimaan_id[$item->barang_id] ?? '' }}">
                     </td>
-                    <td><input type="text" class="form-control" {{ $disable }} name="batch[{{ $item->barang_id }}]" value="{{ $item->batch ?? '' }}" required></td>
+                    <td><input type="text" class="form-control" {{ $disable }} name="batch[{{ $item->barang_id }}]" value="{{ $item->batch ?? '' }}"></td>
                     {{-- <td><input type="date" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}" required></td> --}}
-                    <input type="hidden" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}" required>
+                    <input type="hidden" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}">
                     <td>
                         <input type="hidden" name="rak_id[{{ $item->barang_id }}]" value="{{ $item->rak_id }}">
                         {{ $item->nama_rak }}

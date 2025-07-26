@@ -46,7 +46,7 @@
                                         <tr>
                                             <th>Nama Gudang</th>
                                             <th>Nama Rak</th>
-                                            <th>Kapasitas</th>
+                                            {{-- <th>Kapasitas</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -55,7 +55,7 @@
                                             <tr>
                                                 <td>{{ $item->nama_gudang }}</td>
                                                 <td>{{ $item->nama }}</td>
-                                                <td>{{ $item->kapasitas }}</td>
+                                                {{-- <td>{{ $item->kapasitas }}</td> --}}
                                                 <td>
                                                     <button onclick="edit('{{ $item->rak_id }}')" class="btn btn-primary"> Edit</button>
                                                     <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','rak/delete/{{ $item->rak_id }}')"

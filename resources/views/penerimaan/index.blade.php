@@ -61,6 +61,9 @@
                                                 <td>
                                                     @if ($item->flag_selesai != 1)
                                                         <button onclick="detail('{{ $item->pemesanan_id }}')" class="btn btn-warning"> Terima Barang</button>
+                                                        @if (!empty($item->faktur))
+                                                            <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-primary text-white">Konfirmasi Penyimpanan</a>
+                                                        @endif
                                                     @else
                                                         {{-- <span class="badge bg-primary">Barang Sudah di terima semua</span> --}}
                                                         <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-primary text-white">Konfirmasi Penyimpanan</a>

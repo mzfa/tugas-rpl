@@ -67,7 +67,7 @@ class RakController extends Controller
             'created_by' => Auth::user()->id,
             'created_at' => now(),
             'nama' => $request->nama,
-            'kapasitas' => $request->kapasitas,
+            'kapasitas' => $request->kapasitas ?? 0,
             'referensi_id' => $request->referensi_id,
             'barang_id' => $barang_id,
         ];
@@ -99,7 +99,7 @@ class RakController extends Controller
             'updated_by' => Auth::user()->id,
             'updated_at' => now(),
             'nama' => $request->nama,
-            'kapasitas' => $request->kapasitas,
+            'kapasitas' => $request->kapasitas ?? 0,
             'referensi_id' => $request->referensi_id,
             'barang_id' => $barang_id,
         ];
