@@ -37,23 +37,15 @@
                                     <div>
                                     </div>
                                 </div>
-                                <div class="col-sm">
-                                    <div class="d-flex justify-content-sm-end">
-                                        <div class="search-box ms-2">
-                                            <input type="text" class="form-control search" placeholder="Search...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="table-responsive table-card mt-3 mb-1">
-                                <table class="table align-middle table-nowrap" id="customerTable">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="sort" data-sort="customer_nama">Tanggal Pemesanan</th>
                                             <th class="sort" data-sort="customer_nama">Kode</th>
-                                            <th class="sort" data-sort="customer_nama">Keterangan</th>
+                                            <th class="sort" data-sort="customer_nama">Purchasing Document</th>
                                             <th class="sort" data-sort="action">Action</th>
                                         </tr>
                                     </thead>
@@ -65,39 +57,21 @@
                                             <tr>
                                                 <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->kode }}</td>
-                                                <td>{{ $item->keterangan }}</td>
+                                                <td>{{ $item->purchasing_document }}</td>
                                                 <td>
                                                     @if ($item->flag_selesai != 1)
-                                                        <button onclick="detail('{{ $item->pemesanan_id }}')" class="btn btn-warning"> Buat DO</button>
+                                                        <button onclick="detail('{{ $item->pemesanan_id }}')" class="btn btn-warning"> Terima Barang</button>
                                                     @else
                                                         {{-- <span class="badge bg-primary">Barang Sudah di terima semua</span> --}}
-                                                        <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-primary text-white">Detail</a>
+                                                        <a target="_blank" href="{{ url('penerimaan/lihat/'.$item->pemesanan_id) }}" class="btn btn-primary text-white">Konfirmasi Penyimpanan</a>
                                                     @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any orders for you search.</p>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="d-flex justify-content-end">
-                                <div class="pagination-wrap hstack gap-2">
-                                    <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                        Previous
-                                    </a>
-                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                    <a class="page-item pagination-next" href="javascript:void(0);">
-                                        Next
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div><!-- end card -->
                 </div>

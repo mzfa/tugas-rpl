@@ -46,7 +46,7 @@
                     <td class="customer_name">{{ $item->satuan }}</td>
                     <td class="customer_name">{{ $jumlah[$item->barang_id] ?? '' }}</td>
                     <td class="customer_name">
-                        <input type="number" class="form-control" {{ $disable }} name="terima[{{ $item->barang_id }}]" value="{{ $item->terima ?? '' }}" required>
+                        <input type="number" class="form-control" {{ $disable }} name="terima[{{ $item->barang_id }}]" max="{{ $jumlah[$item->barang_id] ?? 0 }}" value="{{ $item->terima ?? '' }}" required>
                         <input type="hidden" class="form-control" {{ $disable }} name="jumlah_sebelumnya[{{ $item->barang_id }}]" value="{{ $jumlah[$item->barang_id] ?? '' }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
                         <input type="hidden" class="form-control" {{ $disable }} name="harga_jual[{{ $item->barang_id }}]" value="{{ $item->harga_jual }}">
