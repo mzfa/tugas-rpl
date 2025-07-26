@@ -42,6 +42,7 @@
                                         <th>Supplier</th>
                                         <th>Penerima</th>
                                         <th>Barang</th>
+                                        <th>Rak</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,6 +59,13 @@
                                                 <ul>
                                                     @foreach ($detail_penerimaan[$key] as $detail)
                                                         <li>{{ $detail['nama_barang'] }} ({{ $detail['terima']. ' ' . $detail['satuan'] }})</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td class="customer_name">
+                                                <ul>
+                                                    @foreach ($detail_penerimaan[$key] as $detail)
+                                                        <li>{{ $detail['nama_rak'] }}</li>
                                                     @endforeach
                                                 </ul>
                                             </td>

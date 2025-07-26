@@ -25,10 +25,13 @@ class LaporanController extends Controller
                 'supplier.nama as nama_supplier',
                 'barang.nama as nama_barang',
                 'barang.barang_id',
+                'barang.kode_barang',
+                'rak.nama as nama_rak',
                 'barang.satuan',
             )
             ->join('pemesanan','pemesanan.pemesanan_id','penerimaan.pemesanan_id')
             ->join('penerimaan_detail','penerimaan_detail.penerimaan_id','penerimaan.id')
+            ->join('rak','rak.rak_id','penerimaan_detail.rak_id')
             ->join('barang','barang.barang_id','penerimaan_detail.barang_id')
             ->join('supplier','supplier.supplier_id','pemesanan.supplier_id')
             ->join('users','users.id','penerimaan.created_by')
@@ -49,7 +52,9 @@ class LaporanController extends Controller
                 "nama_supplier" => $item->nama_supplier,
             ];
             $detail_penerimaan[$item->kode_penerimaan][$item->barang_id] = [  
+                "kode_barang" => $item->kode_barang,
                 "nama_barang" => $item->nama_barang,
+                "nama_rak" => $item->nama_rak,
                 "barang_id" => $item->barang_id,
                 "terima" => $item->terima,
                 "satuan" => $item->satuan,
