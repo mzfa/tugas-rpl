@@ -85,7 +85,6 @@ class PemesananController extends Controller
             })
             ->where('pemesanan_detail.pemesanan_id', $id)
             ->get();
-            // dd($data);
         $pemesanan_detail = [];
         $jumlah = [];
         $terima = [];

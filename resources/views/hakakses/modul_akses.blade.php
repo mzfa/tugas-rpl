@@ -34,11 +34,11 @@
                                     <form action="{{ url('hakakses/modul_akses') }}" method="post">
                                         @csrf
                                         <button type="submit" action="{{ url('menu') }}"
-                                            class="btn btn-primary w-100">Simpan
+                                            class="btn btn-primary w-100 m-3">Simpan
                                             Akses</button><br>
                                         <input type="hidden" name="hakakses_id"
                                             value="{{ $data_hakakses[0]->hakakses_id }}">
-                                        <table class="table align-middle table-nowrap" id="customerTable">
+                                        <table class="table mt-2">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>#</th>
@@ -46,7 +46,7 @@
                                                     <th>Url</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="list form-check-all">
+                                            <tbody class="form-check-all">
                                                 @php $menu_akses = explode ("|", $data_hakakses[0]->menu_id) @endphp
                                                 @foreach ($menu as $item)
                                                     <tr class="bg-info">
@@ -94,29 +94,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                        <div class="noresult" style="display: none">
-                                            <div class="text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                    colors="primary:#121331,secondary:#08a88a"
-                                                    style="width:75px;height:75px"></lord-icon>
-                                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                <p class="text-muted mb-0">We've searched more than 150+ Orders We did not
-                                                    find any orders for you search.</p>
-                                            </div>
-                                        </div>
                                     </form>
-                                </div>
-
-                                <div class="d-flex justify-content-end">
-                                    <div class="pagination-wrap hstack gap-2">
-                                        <a class="page-item pagination-prev disabled" href="javascript:void(0);">
-                                            Previous
-                                        </a>
-                                        <ul class="pagination listjs-pagination mb-0"></ul>
-                                        <a class="page-item pagination-next" href="javascript:void(0);">
-                                            Next
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
                         </div><!-- end card -->

@@ -15,8 +15,15 @@ class StokDepoController extends Controller
     {
         $bagian = Auth::user()->bagian_id;
         $data = DB::table('stock_real')
-            ->select('stock_real.*','barang.nama as nama_barang')
+            ->select(
+                'stock_real.*',
+                'barang.nama as nama_barang',
+                'rak.nama as nama_rak',
+                'gudang.nama as nama_gudang'
+            )
             ->join('barang','barang.barang_id','=','stock_real.barang_id')
+            ->leftJoin('rak','rak.rak_id','stock_real.rak_id')
+            ->leftJoin('gudang','gudang.gudang_id','rak.referensi_id')
             ->where('bagian_id',$bagian)
             ->whereNull('stock_real.deleted_at')
             ->get();

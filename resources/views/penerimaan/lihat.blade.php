@@ -50,7 +50,7 @@
                                                 <th class="sort" data-sort="customer_nama">Pesan</th>
                                                 <th class="sort" data-sort="customer_nama">Terima</th>
                                                 <th class="sort" data-sort="customer_nama">Batch</th>
-                                                <th class="sort" data-sort="customer_nama">Exp</th>
+                                                {{-- <th class="sort" data-sort="customer_nama">Exp</th> --}}
                                                 <th class="sort" data-sort="customer_nama">Rak</th>
                                                 <th class="sort" data-sort="customer_nama">Scan Rak</th>
                                             </tr>
@@ -64,7 +64,7 @@
                                                     <td class="customer_name">{{ $jumlah[$item->barang_id] ?? '' }}</td>
                                                     <td class="customer_name">{{ $item->terima ?? '' }}</td>
                                                     <td class="customer_name">{{ $item->batch ?? '' }}</td>
-                                                    <td>{{ $item->expired ?? '' }}</td>
+                                                    {{-- <td>{{ $item->expired ?? '' }}</td> --}}
                                                     <td>{{ $item->nama_rak }}</td>
                                                     <td>
                                                         <a target="_blank" href="{{ url('penerimaan/scan/'.$item->penerimaan_detail_id) }}" class="btn btn-primary text-white">Scan</a>

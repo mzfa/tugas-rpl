@@ -40,7 +40,16 @@ class PenerimaanController extends Controller
         if($data->flag_selesai == 1){
             return array('error','Barang sudah check in sebelumnya');
         }
-        $stock_real = DB::table('stock_real')->where(['rak_id' => $data->rak_id,'batch' => $data->batch,'expired' => $data->expired,'bagian_id' => 1])->first();
+        $bagian_id = Auth::user()->bagian_id;
+        $stock_real = DB::table('stock_real')->where([
+            'rak_id' => $data->rak_id,
+            'barang_id' => $data->barang_id,
+            'batch' => $data->batch,
+            'expired' => $data->expired,
+            'bagian_id' => $bagian_id
+        ])
+        ->whereNull('deleted_at')
+        ->first();
         if(empty($stock_real)){
             $datanya = [
                 'created_by' => Auth::user()->id,
@@ -50,9 +59,10 @@ class PenerimaanController extends Controller
                 'rak_id' => $data->rak_id,
                 'expired' => $data->expired,
                 'jumlah_barang' => $data->terima,
-                'bagian_id' => 1,
+                'bagian_id' => $bagian_id,
             ];
             DB::table('stock_real')->insert($datanya);
+            $jumlahnya =  $data->terima;
         }else{
             $jumlahnya =  $data->terima + $stock_real->jumlah_barang;
             $datanya = [
@@ -65,6 +75,24 @@ class PenerimaanController extends Controller
             $stock_real_id = $stock_real->stock_real_id;
             DB::table('stock_real')->where(['stock_real_id' => $stock_real_id])->update($datanya);
         }
+        $kartu_stok = DB::table('kartu_stok')->where([
+                'barang_id' => $data->barang_id,
+                'bagian_id' => $bagian_id
+            ])->whereNull('deleted_at')
+            ->orderByDesc('kartu_stok_id')
+            ->first();
+        $data_kartu_stok = [
+            'created_by' => Auth::user()->id,
+            'created_at' => now(),
+            'barang_id' => $data->barang_id,
+            'stok_awal' => $kartu_stok->stok_akhir ?? 0,
+            'penambahan' => $jumlahnya,
+            'pengurangan' => 0,
+            'stok_akhir' => $kartu_stok->stok_akhir ?? 0 + $jumlahnya,
+            'bagian_id' => $bagian_id,
+            'keterangan' => "Penerimaan Barang",
+        ];
+        DB::table('kartu_stok')->insert($data_kartu_stok);
         DB::table('penerimaan_detail')->where(['penerimaan_detail_id' => $data->penerimaan_detail_id])->update([
             'flag_selesai' => 1
         ]);

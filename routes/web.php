@@ -24,6 +24,7 @@ use App\Http\Controllers\IjinPelaksanaanController;
 use App\Http\Controllers\JenisPekerjaanController;
 use App\Http\Controllers\KategoriDokumenController;
 use App\Http\Controllers\KategoriSuratController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MaterialApprovalController;
 use App\Http\Controllers\MetodeController;
 use App\Http\Controllers\NotulenController;
@@ -200,6 +201,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::controller(StokDepoController::class)->middleware('cek_login:stok_depo.index')->group(function () {
         Route::get('/stok_depo', 'index')->name('stok_depo.index');
     });
+
+    Route::controller(LaporanController::class)->group(function () {
+        Route::prefix('laporan')->group(function () {
+            Route::get('/penerimaan', 'penerimaan')->name('laporan.penerimaan');
+            Route::get('/pemesanan', 'pemesanan')->name('laporan.pemesanan');
+            Route::get('/permintaan', 'permintaan')->name('laporan.permintaan');
+            Route::get('/kartu_stok', 'kartu_stok')->name('laporan.kartu_stok');
+        });
+    });
+
 
     Route::group(['middleware' => ['cek_login:User']], function () {
         // Route::get('/profile', [\App\Http\Controllers\User\ProfileController::class, 'index'])->name('profile');

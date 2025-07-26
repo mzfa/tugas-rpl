@@ -38,23 +38,15 @@
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#basicModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>
                                     </div>
                                 </div>
-                                <div class="col-sm">
-                                    <div class="d-flex justify-content-sm-end">
-                                        <div class="search-box ms-2">
-                                            <input type="text" class="form-control search" placeholder="Search...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div class="table-responsive table-card mt-3 mb-1">
-                                <table class="table align-middle table-nowrap" id="customerTable">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="sort" data-sort="customer_nama">Tanggal Pemesanan</th>
                                             <th class="sort" data-sort="customer_nama">Kode</th>
-                                            <th class="sort" data-sort="customer_nama">Keterangan</th>
+                                            <th class="sort" data-sort="customer_nama">Purchasing Document</th>
                                             <th class="sort" data-sort="action">Action</th>
                                         </tr>
                                     </thead>
@@ -66,7 +58,7 @@
                                             <tr>
                                                 <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->kode }}</td>
-                                                <td>{{ $item->keterangan }}</td>
+                                                <td>{{ $item->purchasing_document }}</td>
                                                 <td>
                                                     <button onclick="detail('{{ $item->pemesanan_id }}')" class="btn btn-warning"> Detail</button>
                                                     <button onclick="edit('{{ $item->pemesanan_id }}')" class="btn btn-primary"> Edit</button>
@@ -77,13 +69,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any orders for you search.</p>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="d-flex justify-content-end">

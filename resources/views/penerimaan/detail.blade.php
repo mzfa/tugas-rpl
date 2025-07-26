@@ -29,7 +29,7 @@
                 <th class="sort" data-sort="customer_nama">Pesan</th>
                 <th class="sort" data-sort="customer_nama">Terima</th>
                 <th class="sort" data-sort="customer_nama">Batch</th>
-                <th class="sort" data-sort="customer_nama">Exp</th>
+                {{-- <th class="sort" data-sort="customer_nama">Exp</th> --}}
                 <th class="sort" data-sort="customer_nama">Rak</th>
             </tr>
         </thead>
@@ -55,7 +55,8 @@
                         <input type="hidden" class="form-control" {{ $disable }} name="penerimaan_id" value="{{ $penerimaan_id[$item->barang_id] ?? '' }}">
                     </td>
                     <td><input type="text" class="form-control" {{ $disable }} name="batch[{{ $item->barang_id }}]" value="{{ $item->batch ?? '' }}" required></td>
-                    <td><input type="date" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}" required></td>
+                    {{-- <td><input type="date" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}" required></td> --}}
+                    <input type="hidden" class="form-control" {{ $disable }} name="expired[{{ $item->barang_id }}]" value="{{ $item->expired ?? '' }}" required>
                     <td>
                         <input type="hidden" name="rak_id[{{ $item->barang_id }}]" value="{{ $item->rak_id }}">
                         {{ $item->nama_rak }}

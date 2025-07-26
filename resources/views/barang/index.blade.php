@@ -86,7 +86,7 @@
                                 </div> --}}
                             </div>
                         </div>
-                    </div><!-- end card -->
+                    </div>
                 </div>
                 <!-- end col -->
             </div>

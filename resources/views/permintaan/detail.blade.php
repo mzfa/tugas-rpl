@@ -19,34 +19,34 @@
                 </th>
                 <th class="sort" data-sort="customer_nama">Nama Barang</th>
                 <th class="sort" data-sort="customer_nama">Nomor Batch</th>
-                <th class="sort" data-sort="customer_nama">Expired</th>
+                {{-- <th class="sort" data-sort="customer_nama">Expired</th> --}}
                 <th class="sort" data-sort="customer_nama">Gudang | RAK</th>
                 <th class="sort" data-sort="customer_nama">Stock</th>
                 <th class="sort" data-sort="customer_nama">Jumlah Barang</th>
             </tr>
         </thead>
         <tbody class="list form-check-all">
-            @foreach ($data_barang as $item)
+            @foreach ($data_mapping as $item)
                 <tr>
                     <th scope="row">
                         <div class="form-check">
-                            <input {{ $status }} class="form-check-input" type="checkbox" @if(in_array($item->barang_id,$permintaan_detail)) checked @endif name="barang_id[]" value="{{ $item->barang_id }}">
+                            <input {{ $status }} class="form-check-input" type="checkbox" @if(in_array($item['barang_id'],$permintaan_detail)) checked @endif name="barang_id[]" value="{{ $item['barang_id'] }}">
                         </div>
                     </th>
-                    <td class="customer_name">{{ $item->nama_barang }}</td>
-                    <td class="customer_name">{{ $item->batch }}</td>
-                    <td class="customer_name">{{ $item->expired }}</td>
-                    <td class="customer_name">{{ $item->nama_bagian.' | '.$item->nama_rak }}</td>
-                    <td class="customer_name">{{ $item->jumlah_barang }}</td>
+                    <td class="customer_name">{{ $item['nama_barang'] }}</td>
+                    <td class="customer_name">{{ $item['batch'] }}</td>
+                    {{-- <td class="customer_name">{{ $item['expired'] }}</td> --}}
+                    <td class="customer_name">{{ $item['nama_bagian'].' | '.$item['nama_rak'] }}</td>
+                    <td class="customer_name">{{ $item['jumlah_barang'] }}</td>
                     <td class="customer_name">
-                        <input type="number" max="{{ $item->jumlah_barang }}" class="form-control" {{ $status }} name="jumlah[{{ $item->barang_id }}]" value="{{ $jumlah[$item->barang_id] ?? '' }}" max="{{ $item->jumlah_barang }}">
-                        <input type="hidden" class="form-control" name="satuan[{{ $item->barang_id }}]" value="{{ $item->satuan }}">
-                        <input type="hidden" class="form-control" name="barang_id[{{ $item->barang_id }}]" value="{{ $item->barang_id }}">
-                        <input type="hidden" class="form-control" name="rak_id[{{ $item->barang_id }}]" value="{{ $item->rak_id }}">
-                        <input type="hidden" class="form-control" name="expired[{{ $item->barang_id }}]" value="{{ $item->expired }}">
-                        <input type="hidden" class="form-control" name="batch[{{ $item->barang_id }}]" value="{{ $item->batch }}">
-                        <input type="hidden" class="form-control" name="satuan[{{ $item->barang_id }}]" value="{{ $item->batch }}">
-                        <input type="hidden" class="form-control" name="jumlah_barang[{{ $item->barang_id }}]" value="{{ $item->jumlah_barang }}">
+                        <input type="number" max="{{ $item['jumlah_barang'] }}" class="form-control" {{ $status }} name="jumlah[{{ $item['barang_id'] }}]" value="{{ $jumlah[$item['barang_id']] ?? '' }}" max="{{ $item['jumlah_barang'] }}">
+                        <input type="hidden" class="form-control" name="satuan[{{ $item['barang_id'] }}]" value="{{ $item['satuan'] }}">
+                        <input type="hidden" class="form-control" name="barang_id[{{ $item['barang_id'] }}]" value="{{ $item['barang_id'] }}">
+                        <input type="hidden" class="form-control" name="rak_id[{{ $item['barang_id'] }}]" value="{{ $item['rak_id'] }}">
+                        <input type="hidden" class="form-control" name="expired[{{ $item['barang_id'] }}]" value="{{ $item['expired'] }}">
+                        <input type="hidden" class="form-control" name="batch[{{ $item['barang_id'] }}]" value="{{ $item['batch'] }}">
+                        <input type="hidden" class="form-control" name="satuan[{{ $item['barang_id'] }}]" value="{{ $item['batch'] }}">
+                        <input type="hidden" class="form-control" name="jumlah_barang[{{ $item['barang_id'] }}]" value="{{ $item['jumlah_barang'] }}">
                     </td>
                 </tr>
             @endforeach
