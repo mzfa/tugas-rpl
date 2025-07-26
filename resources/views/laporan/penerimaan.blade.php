@@ -58,7 +58,7 @@
                                             <td class="customer_name">
                                                 <ul>
                                                     @foreach ($detail_penerimaan[$key] as $detail)
-                                                        <li>{{ $detail['nama_barang'] }} ({{ $detail['terima']. ' ' . $detail['satuan'] }})</li>
+                                                        <li>{{ $detail['kode_barang'] }} || {{ $detail['nama_barang'] }} ({{ $detail['terima']. ' ' . $detail['satuan'] }})</li>
                                                     @endforeach
                                                 </ul>
                                             </td>
