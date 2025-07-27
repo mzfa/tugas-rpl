@@ -148,10 +148,11 @@ class PenerimaanController extends Controller
             $penerimaan_id[$item->barang_id] = $item->penerimaan_id;
         }
         $penerimaan = DB::table('penerimaan')->where('pemesanan_id',$id)->first();
+        $pemesanan = DB::table('pemesanan')->where('pemesanan_id',$id)->first();
         $rak = DB::table('rak')->whereNull('deleted_at')->get();
         // dd($penerimaan);
         $barang = DB::table('barang')->whereNull('deleted_at')->get();
-        return view('penerimaan.detail', compact('pemesanan_detail','barang','id','jumlah','penerimaan_detail_id','pemesanan_detail_id','penerimaan_id','data','penerimaan','rak'));
+        return view('penerimaan.detail', compact('pemesanan_detail','barang','id','jumlah','penerimaan_detail_id','pemesanan_detail_id','penerimaan_id','data','penerimaan','rak','pemesanan'));
     }
     public function lihat(string $id)
     {
@@ -167,6 +168,7 @@ class PenerimaanController extends Controller
                 'penerimaan_detail.penerimaan_detail_id',
                 'penerimaan_detail.batch',
                 'penerimaan_detail.rak_id',
+                'penerimaan_detail.flag_selesai',
                 'rak.nama as nama_rak',
             )
             ->leftJoin('barang','barang.barang_id','pemesanan_detail.barang_id')

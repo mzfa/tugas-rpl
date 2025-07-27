@@ -67,7 +67,11 @@
                                                     {{-- <td>{{ $item->expired ?? '' }}</td> --}}
                                                     <td>{{ $item->nama_rak }}</td>
                                                     <td>
-                                                        <a target="_blank" href="{{ url('penerimaan/scan/'.$item->penerimaan_detail_id) }}" class="btn btn-primary text-white">Scan</a>
+                                                        @if ($item->flag_selesai == 1)
+                                                            <span class="badge bg-warning p-1"> Barang sudah didalam rak</span>
+                                                        @else
+                                                            <a target="_blank" href="{{ url('penerimaan/scan/'.$item->penerimaan_detail_id) }}" class="btn btn-primary text-white">Scan</a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

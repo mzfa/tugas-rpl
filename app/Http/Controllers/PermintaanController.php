@@ -15,9 +15,31 @@ class PermintaanController extends Controller
     {
         $bagian = Auth::user()->bagian_id;
         if($bagian != 0 && $bagian !== 1){
-            $data = DB::table('permintaan')->whereNull('deleted_at')->where('bagian_id',$bagian)->get();
+            $data = DB::table('permintaan')
+                ->select(
+                    'permintaan.permintaan_id',
+                    'permintaan.kode',
+                    'permintaan.tanggal',
+                    'permintaan.keterangan',
+                    'permintaan.flag_selesai',
+                    'users.bagian_id',
+                )
+                ->join('users','users.id','permintaan.created_by')
+                ->whereNull('permintaan.deleted_at')
+                ->where('users.bagian_id',$bagian)
+                ->get();
         }else{
-            $data = DB::table('permintaan')->whereNull('deleted_at')->get();
+            $data = DB::table('permintaan')
+                ->select(
+                    'permintaan.permintaan_id',
+                    'permintaan.kode',
+                    'permintaan.tanggal',
+                    'permintaan.keterangan',
+                    'permintaan.flag_selesai',
+                    'users.bagian_id',
+                )
+                ->join('users','users.id','permintaan.created_by')
+                ->whereNull('permintaan.deleted_at')->get();
             // dd($data);
         }
         $bagian = DB::table('bagian')->whereNull('deleted_at')->whereNotIn('bagian_id',[$bagian])->get();
@@ -74,7 +96,8 @@ class PermintaanController extends Controller
                 'stock_real.rak_id',
                 'stock_real.jumlah_barang',
             )
-            // ->where('permintaan_id', $id)
+            ->where('stock_real.bagian_id', 1)
+            ->whereNull('stock_real.deleted_at')
             ->get();
         // dd($data_barang);
         $data = DB::table('permintaan_detail')->where('permintaan_id', $id)->get();
@@ -83,7 +106,11 @@ class PermintaanController extends Controller
         $jumlah = [];
         $data_mapping = [];
         foreach ($data_barang as $key => $value) {
-            $data_mapping[$value->stock_real_id] = [
+            $jumlah_barang = $value->jumlah_barang;
+            if (!empty($data_mapping[$value->barang_id]['jumlah_barang'])) {
+                $jumlah_barang += $data_mapping[$value->barang_id]['jumlah_barang'];
+            }
+            $data_mapping[$value->barang_id] = [
                 "stock_real_id" => $value->stock_real_id,
                 "nama_barang" => $value->nama_barang,
                 "nama_rak" => $value->nama_rak,
@@ -93,7 +120,7 @@ class PermintaanController extends Controller
                 "expired" => $value->expired,
                 "barang_id" => $value->barang_id,
                 "rak_id" => $value->rak_id,
-                "jumlah_barang" => $value->jumlah_barang,
+                "jumlah_barang" => $jumlah_barang,
             ];
         }
 
@@ -132,7 +159,8 @@ class PermintaanController extends Controller
                 // dd($barang);
                 if(!empty($request->jumlah[$key])){
                     if($request->jumlah[$key] > 0){
-                        $stock_real = DB::table('stock_real')->where(['rak_id' => $request->rak_id[$key],'batch' => $request->batch[$key],'expired' => $request->expired[$key],'bagian_id' => $bagian_id])->first();
+                        $stock_real = DB::table('stock_real')
+                            ->where(['rak_id' => $request->rak_id[$key],'batch' => $request->batch[$key],'expired' => $request->expired[$key],'bagian_id' => $bagian_id])->first();
                         if(empty($stock_real)){
                             $datanya = [
                                 'created_by' => Auth::user()->id,

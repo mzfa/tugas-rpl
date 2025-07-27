@@ -143,6 +143,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/barang/store', 'store');
         Route::get('/barang/edit/{id}', 'edit');
         Route::post('/barang/update', 'update');
+        // ----- stok opname
+        Route::get('/barang/detail/{id}', 'detail');
+        Route::get('/barang/stok_depo/delete/{id}', 'stok_depo_delete');
+        Route::post('/barang/stok_depo/store', 'stok_depo_store');
+        Route::get('/barang/stok_depo/edit/{id}', 'stok_depo_edit');
+        Route::post('/barang/stok_depo/update', 'stok_depo_update');
     });
     Route::controller(SupplierController::class)->middleware('cek_login:supplier.index')->group(function () {
         Route::get('/supplier', 'index')->name('supplier.index');

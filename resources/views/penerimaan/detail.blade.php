@@ -7,6 +7,10 @@
 @endphp
 <div class="table-responsive">
     <div class="mb-3">
+        <label for="staticEmail" class="form-label">Purchasing Document</label>
+        <input type="text" class="form-control" id="purchasing_document" name="purchasing_document" value="{{ $pemesanan->purchasing_document ?? '' }}" disabled required>
+    </div>
+    <div class="mb-3">
         <label for="staticEmail" class="form-label">Tanggal Penerimaan</label>
         <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $penerimaan->tanggal ?? '' }}" {{ $disable }} required>
     </div>

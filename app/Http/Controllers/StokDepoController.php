@@ -24,7 +24,7 @@ class StokDepoController extends Controller
             ->join('barang','barang.barang_id','=','stock_real.barang_id')
             ->leftJoin('rak','rak.rak_id','stock_real.rak_id')
             ->leftJoin('gudang','gudang.gudang_id','rak.referensi_id')
-            ->where('bagian_id',$bagian)
+            ->where('stock_real.bagian_id',$bagian)
             ->whereNull('stock_real.deleted_at')
             ->get();
         // dd($data,$bagian);

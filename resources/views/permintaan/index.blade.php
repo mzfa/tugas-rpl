@@ -69,22 +69,32 @@
                                                 <td>{{ $item->keterangan }}</td>
                                                 <td>
                                                     @if ($item->flag_selesai == 1)
-                                                        <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-info"> 
-                                                            Proses
-                                                        </button>
+                                                        @if (Auth::user()->bagian_id == 1)
+                                                            <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-info"> 
+                                                                Proses
+                                                            </button>
+                                                        @else
+                                                            <span class="badge bg-warning p-1">Barang sedang di proses</span>
+                                                        @endif
                                                     @elseif($item->flag_selesai == 2)
+                                                        @if (Auth::user()->bagian_id == $item->bagian_id)
                                                         <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-danger"> 
                                                             Terima
                                                         </button>
+                                                        @else
+                                                            <span class="badge bg-warning p-1">Barang belum diterima oleh bagian peminta</span>
+                                                        @endif
                                                     @elseif($item->flag_selesai == 3)
                                                         <span class="badge bg-primary">Transaksi Selesai</span>
                                                     @else
+                                                        @if (Auth::user()->bagian_id == $item->bagian_id)
                                                         <button onclick="detail('{{ $item->permintaan_id }}')" class="btn btn-warning"> 
                                                             Detail
                                                         </button>
                                                         <button onclick="edit('{{ $item->permintaan_id }}')" class="btn btn-primary"> Edit</button>
                                                         <a onclick="return confirmation('Apakah anda ingin menghapus ini?', 'Hapus','permintaan/delete/{{ $item->permintaan_id }}')"
                                                                 class="btn btn-danger text-white">Hapus</a>
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>

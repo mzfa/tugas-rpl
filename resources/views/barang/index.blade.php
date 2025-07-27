@@ -71,6 +71,9 @@
                                                         <div class="remove">
                                                             <a class="btn btn-sm btn-danger remove-item-btn" onclick="return confirm('Apakah anda yakin ini dihapus?')" href="{{ url('barang/delete/' . $item->barang_id) }}">Remove</a>
                                                         </div>
+                                                        <div class="detail">
+                                                            <a class="btn btn-sm btn-warning detail-item-btn" href="{{ url('barang/detail/' . $item->barang_id) }}">Detail</a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

@@ -109,4 +109,165 @@ class BarangController extends Controller
         DB::table('barang')->whereNull('deleted_at')->where(['barang_id' => $id])->update($data);
         return Redirect::back()->with(['success' => 'Data Berhasil Di Hapus!']);
     }
+
+    public function detail(string $id)
+    {
+        $bagian_id = Auth::user()->bagian_id;
+        $data = DB::table('barang')->whereNull('deleted_at')->where('barang_id', $id)->first();
+        $rak = DB::table('rak')->whereNull('deleted_at')->get();
+        $stok_real = DB::table('stock_real')
+            ->leftJoin('rak','rak.rak_id','stock_real.rak_id')
+            ->whereNull('stock_real.deleted_at')
+            ->where('stock_real.barang_id', $id)
+            ->where('stock_real.bagian_id', $bagian_id)
+            ->get();
+        return view('barang.detail', compact('data','stok_real','rak'));
+    }
+
+    public function stok_depo_store(Request $request)
+    {
+        $request->validate([
+            'batch' => 'required',
+        ]);
+        // dd($request);
+        $bagian_id = Auth::user()->bagian_id;
+        $data = [
+            'created_by' => Auth::user()->id,
+            'created_at' => now(),
+            'barang_id' => $request->barang_id,
+            'batch' => $request->batch,
+            'jumlah_barang' => $request->jumlah_barang,
+            'rak_id' => $request->rak_id,
+            'bagian_id' => $bagian_id,
+        ];
+        DB::table('stock_real')->insert($data);
+
+        $kartu_stok = DB::table('kartu_stok')->where([
+                'barang_id' => $request->barang_id,
+                'bagian_id' => $bagian_id
+            ])->whereNull('deleted_at')
+            ->orderByDesc('kartu_stok_id')
+            ->first();
+        $penambahan = (int) $request->jumlah_barang;
+        $stok_akhir = $penambahan + ($kartu_stok->stok_akhir ?? 0);
+        $data_kartu_stok = [
+            'created_by' => Auth::user()->id,
+            'created_at' => now(),
+            'barang_id' => $request->barang_id,
+            'stok_awal' => $kartu_stok->stok_akhir ?? 0,
+            'penambahan' => $penambahan,
+            'pengurangan' => 0,
+            'stok_akhir' => $stok_akhir,
+            'bagian_id' => $bagian_id,
+            'keterangan' => "Penyesuaian Stok Barang",
+        ];
+        DB::table('kartu_stok')->insert($data_kartu_stok);
+
+        return Redirect::back()->with(['success' => 'Data Berhasil Di Simpan!']);
+    }
+
+    public function stok_depo_edit(string $id)
+    {
+        $stok_depo = DB::table('stock_real')->whereNull('deleted_at')->where('stock_real_id', $id)->first();
+        $rak = DB::table('rak')->whereNull('deleted_at')->get();
+        return view('barang.stok_depo_form', compact('stok_depo','rak'));
+    }
+
+    public function stok_depo_update(Request $request)
+    {
+        $request->validate([
+            'batch' => 'required',
+        ]);
+        // dd($request);
+        $bagian_id = Auth::user()->bagian_id;
+        $data = [
+            'updated_by' => Auth::user()->id,
+            'updated_at' => now(),
+            'batch' => $request->batch,
+            'jumlah_barang' => $request->jumlah_barang,
+            'rak_id' => $request->rak_id,
+        ];
+        DB::table('stock_real')->insert($data);
+
+        $jumlah_sebelumnya = $request->jumlah_sebelumnya;
+
+        $kartu_stok = DB::table('kartu_stok')->where([
+                'barang_id' => $request->barang_id,
+                'bagian_id' => $bagian_id
+            ])->whereNull('deleted_at')
+            ->orderByDesc('kartu_stok_id')
+            ->first();
+
+        $jumlah_barang = (int) $request->jumlah_barang;
+        $stok_akhir_penambahan = $jumlah_barang + ($kartu_stok->stok_akhir ?? 0);
+        $stok_akhir_pengurangan = ($kartu_stok->stok_akhir ?? 0) - $jumlah_barang;
+
+        if(($jumlah_sebelumnya - $request->jumlah_barang) > 0){
+            $data_kartu_stok = [
+                'created_by' => Auth::user()->id,
+                'created_at' => now(),
+                'barang_id' => $request->barang_id,
+                'stok_awal' => $kartu_stok->stok_akhir ?? 0,
+                'penambahan' => 0,
+                'pengurangan' => $jumlah_barang,
+                'stok_akhir' => $stok_akhir_pengurangan,
+                'bagian_id' => $bagian_id,
+                'keterangan' => "Penyesuaian Stok Barang",
+            ];
+            DB::table('kartu_stok')->insert($data_kartu_stok);
+        }elseif(($jumlah_sebelumnya - $request->jumlah_barang) < 0){
+            $data_kartu_stok = [
+                'created_by' => Auth::user()->id,
+                'created_at' => now(),
+                'barang_id' => $request->barang_id,
+                'stok_awal' => $kartu_stok->stok_akhir ?? 0,
+                'penambahan' => $jumlah_barang,
+                'pengurangan' => 0,
+                'stok_akhir' => $stok_akhir_penambahan,
+                'bagian_id' => $bagian_id,
+                'keterangan' => "Penyesuaian Stok Barang",
+            ];
+            DB::table('kartu_stok')->insert($data_kartu_stok);
+        }else{
+
+        }
+        return Redirect::back()->with(['success' => 'Data Berhasil Di Ubah!']);
+    }
+
+    public function stok_depo_delete(string $id)
+    {
+        // dd($id);
+        $bagian_id = Auth::user()->bagian_id;
+        $stok_depo = DB::table('stock_real')->whereNull('deleted_at')->where('stock_real_id', $id)->first();
+        $data = [
+            'deleted_by' => Auth::user()->id,
+            'deleted_at' => now(),
+        ];
+        DB::table('stock_real')->whereNull('deleted_at')->where(['stock_real_id' => $id])->update($data);
+
+        $kartu_stok = DB::table('kartu_stok')->where([
+                'barang_id' => $stok_depo->barang_id,
+                'bagian_id' => $bagian_id
+            ])->whereNull('deleted_at')
+            ->orderByDesc('kartu_stok_id')
+            ->first();
+
+        $jumlah_barang = (int) $stok_depo->jumlah_barang;
+        $stok_akhir_pengurangan = ($kartu_stok->stok_akhir ?? 0) - $jumlah_barang;
+
+        $data_kartu_stok = [
+            'created_by' => Auth::user()->id,
+            'created_at' => now(),
+            'barang_id' => $stok_depo->barang_id,
+            'stok_awal' => $kartu_stok->stok_akhir ?? 0,
+            'penambahan' => 0,
+            'pengurangan' => $jumlah_barang,
+            'stok_akhir' => $stok_akhir_pengurangan,
+            'bagian_id' => $bagian_id,
+            'keterangan' => "Penyesuaian Stok Barang",
+        ];
+        DB::table('kartu_stok')->insert($data_kartu_stok);
+
+        return Redirect::back()->with(['success' => 'Data Berhasil Di Hapus!']);
+    }
 }

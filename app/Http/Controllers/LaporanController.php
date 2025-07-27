@@ -102,11 +102,13 @@ class LaporanController extends Controller
     }
     public function kartu_stok()
     {
+        $bagian_id = Auth::user()->bagian_id;
         $data = DB::table('kartu_stok')
             ->select('kartu_stok.*', 'barang.nama as nama_barang','bagian.nama_bagian')
             ->join('barang','barang.barang_id','kartu_stok.barang_id')
             ->join('bagian','bagian.bagian_id','kartu_stok.bagian_id')
             ->whereNull('kartu_stok.deleted_at')
+            ->where('kartu_stok.bagian_id',$bagian_id)
             ->orderByDesc('kartu_stok.barang_id')
             ->orderByDesc('kartu_stok.kartu_stok_id')
             ->get();
