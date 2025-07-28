@@ -278,7 +278,7 @@ class PermintaanController extends Controller
                             'expired' => $request->expired[$barang],
                             'jumlah' => $request->jumlah[$key],
                             'permintaan_id' => $permintaan_id,
-                            'satuan' => $request->satuan[$barang],
+                            'satuan' => $request->satuan[$barang] ?? '',
                         ];
                     }
                 }

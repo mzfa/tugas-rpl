@@ -33,17 +33,18 @@ class BarangController extends Controller
             // $image = asset('gambar/'.$nama_file);
         }
         // die();
-        $barang_terakhir = DB::select("SELECT max(kode_barang) as kodeTerbesar FROM barang WHERE deleted_at is null");
+        // $barang_terakhir = DB::select("SELECT max(kode_barang) as kodeTerbesar FROM barang WHERE deleted_at is null");
 
-        $urutan = (int) substr($barang_terakhir[0]->kodeTerbesar, 3, 5);
-        $urutan++;
-        $huruf = "BR-";
-        $kodeBarang = $huruf . sprintf("%05s", $urutan);
+        // $urutan = (int) substr($barang_terakhir[0]->kodeTerbesar, 3, 5);
+        // $urutan++;
+        // $huruf = "BR-";
+        // $kodeBarang = $huruf . sprintf("%05s", $urutan);
         // dd($request);
         $data = [
             'created_by' => Auth::user()->id,
             'created_at' => now(),
-            'kode_barang' => $kodeBarang,
+            // 'kode_barang' => $kodeBarang,
+            'kode_barang' => $request->kode_barang,
             'nama' => $request->nama,
             'kategori' => $request->kategori,
             'satuan' => $request->satuan,

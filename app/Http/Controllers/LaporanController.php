@@ -63,6 +63,44 @@ class LaporanController extends Controller
         // dd($data_supplier);
         return view('laporan.penerimaan', compact('data_penerimaan','detail_penerimaan'));
     }
+    public function pemesanan()
+    {
+        $data = DB::table('pemesanan')
+            ->select(
+                'pemesanan.kode as kode_pemesanan',
+                'pemesanan.tanggal as tanggal_pemesanan',
+                'pemesanan.flag_selesai',
+                'users.name as petugas',
+                'supplier.nama as nama_supplier',
+                'barang.nama as nama_barang',
+                'barang.barang_id as barang_id',
+                'pemesanan_detail.jumlah',
+                'pemesanan_detail.satuan',
+            )
+            ->join('pemesanan_detail','pemesanan_detail.pemesanan_id','pemesanan.pemesanan_id')
+            ->join('supplier','supplier.supplier_id','pemesanan.supplier_id')
+            ->join('barang','barang.barang_id','pemesanan_detail.barang_id')
+            ->leftJoin('users','users.id','pemesanan.created_by')
+            ->whereNull('pemesanan.deleted_at')
+            ->get();
+        $data_pemesanan = [];
+        $detail_pemesanan = [];
+        foreach($data as $item){
+            $data_pemesanan[$item->kode_pemesanan] = [
+                "kode_pemesanan" => $item->kode_pemesanan,
+                "tanggal_pemesanan" => $item->tanggal_pemesanan,
+                "flag_selesai" => $item->flag_selesai,
+                "petugas" => $item->petugas,
+                "nama_supplier" => $item->nama_supplier, 
+            ];
+            $detail_pemesanan[$item->kode_pemesanan][$item->barang_id] = [  
+                "nama_barang" => $item->nama_barang,
+                "barang_id" => $item->barang_id,
+                "jumlah" => $item->jumlah,
+            ];
+        }
+        return view('laporan.pemesanan', compact('data_pemesanan','detail_pemesanan'));
+    }
     public function permintaan()
     {
         $data = DB::table('permintaan')

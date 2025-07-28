@@ -110,6 +110,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="staticEmail" class="form-label">Kode Barang</label>
+                        <input type="text" class="form-control" id="kode_barang" name="kode_barang" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="staticEmail" class="form-label">Nama Barang</label>
                         <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>

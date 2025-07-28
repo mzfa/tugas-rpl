@@ -34,19 +34,27 @@
                             <table class="display table table-bordered dataTable no-footer" id="buttons-datatables">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Nomor PO</th>
+                                        <th>Nomor Pemesanan</th>
                                         <th>Tanggal Pemesanan</th>
-                                        <th>Supplier</th>
+                                        <th>Nama Supplier</th>
+                                        <th>Nama Barang</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $item)
+                                    @foreach ($data_pemesanan as $key => $item)
                                         <tr>
-                                            <td class="customer_name">{{ $item->kode_pemesanan }}</td>
-                                            <td class="customer_name">{{ $item->tanggal_pemesanan }}</td>
-                                            <td class="customer_name">{{ $item->nama_supplier }}</td>
-                                            <td class="customer_name">{{ (!empty($item->flag_selesai)) ? "Barang Sudah Diterima" : "-" }}</td>
+                                            <td class="customer_name">{{ $item['kode_pemesanan'] }}</td>
+                                            <td class="customer_name">{{ $item['tanggal_pemesanan'] }}</td>
+                                            <td class="customer_name">{{ $item['nama_supplier'] }}</td>
+                                            <td class="customer_name">
+                                                <ul>
+                                                @foreach ($detail_pemesanan[$key] as $detail)
+                                                    <li>{{ $detail['nama_barang'] }} ({{ $detail['jumlah'] }})</li>
+                                                @endforeach
+                                                </ul>
+                                            </td>
+                                            <td class="customer_name">{{ (!empty($item['flag_selesai'])) ? "Barang Sudah Diterima" : "-" }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

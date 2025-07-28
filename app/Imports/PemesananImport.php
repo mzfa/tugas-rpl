@@ -53,6 +53,7 @@ class PemesananImport implements ToCollection
             $total = (int) $item[22] * $jumlah;
             $data_detail[$item[0]][$item[8]] = [
                 "barang_id" => $item[8],
+                "nama_barang" => $item[9],
                 "jumlah" => $jumlah,
                 "satuan" => $item[18],
                 "harga_beli" => $item[22],
@@ -87,6 +88,15 @@ class PemesananImport implements ToCollection
             }
             foreach ($data_detail[$key] as $key1 => $row) {
                 // dump($row);
+                $data_barang = DB::table('barang')->where('barang_id',$row['barang_id'])->first();
+                if(empty($data_barang->barang_id)){
+                    DB::table("barang")->insert([
+                        "barang_id" => $row['barang_id'],
+                        "kode_barang" => $row['barang_id'],
+                        "nama" => $row['nama_barang'],
+                        "satuan" => $row['satuan']
+                    ]);
+                }
                 DB::table("pemesanan_detail")->insert([
                     "barang_id" => $row['barang_id'],
                     "jumlah" => $row['jumlah'],
